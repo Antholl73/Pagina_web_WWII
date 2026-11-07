@@ -24,6 +24,51 @@
       </div>
     </header>
 
+    <!-- SECCIÓN SCROLLYTELLING: Crónica interactiva -->
+    <section class="scrolly" id="scrolly-ww2">
+      <!-- 1. FONDO FIJO (Sticky): Se queda anclado en pantalla mientras hacemos scroll -->
+      <div class="scrolly__graphic">
+        <div class="graphic__container">
+          <!-- Este texto cambiará dinámicamente con JavaScript en el siguiente paso -->
+          <div class="graphic__placeholder">
+            <span class="graphic__year" id="current-year">1939</span>
+            <p id="graphic-desc">El inicio del conflicto en Europa</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. VENTANAS NARRATIVAS (Steps): Flotan y se desplazan sobre el fondo -->
+      <article class="scrolly__steps">
+        <!-- Paso 1 -->
+        <div class="step" data-step="1" data-year="1939">
+          <span class="step__badge">Fase 1</span>
+          <h2 class="step__title">1939</h2>
+          <p class="step__text">Las fuerzas alemanas invaden Polonia.</p>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="step" data-step="2" data-year="1940">
+          <span class="step__badge">Fase 2</span>
+          <h2 class="step__title">1940</h2>
+          <p class="step__text">Francia cae.</p>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="step" data-step="3" data-year="1941">
+          <span class="step__badge">Fase 3</span>
+          <h2 class="step__title">1941</h2>
+          <p class="step__text">Alemania rompe el pacto de no agresión.</p>
+        </div>
+
+        <!-- Paso 4 -->
+        <div class="step" data-step="4" data-year="1944">
+          <span class="step__badge">Fase 4</span>
+          <h2 class="step__title">1944</h2>
+          <p class="step__text">liberación de Europa.</p>
+        </div>
+      </article>
+    </section>
+
     <!-- Script principal como módulo ES6 -->
     <script type="module" src="./src/main.js"></script>
   </body>
