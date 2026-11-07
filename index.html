@@ -3,8 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>1939-1945 | La Segunda Guerra Mundial</title>
-    <link rel="stylesheet" href="/src/style.css" />
+    <title>La Segunda Guerra Mundial</title>
+    <!-- Vinculamos los estilos CSS -->
+    <link rel="stylesheet" href="./src/style.css" />
   </head>
-  <body></body>
+  <body>
+    <!-- SECCIÓN HERO: Portada introductoria antes del scroll -->
+    <header class="hero">
+      <div class="hero__content">
+        <span class="hero__tag">1939 — 1945</span>
+        <h1 class="hero__title">La Segunda Guerra Mundial</h1>
+        <p class="hero__subtitle">
+          Un recorrido visual e interactivo a través del conflicto más
+          devastador de la historia humana.
+        </p>
+        <div class="hero__scroll-indicator">
+          <span>Desplaza para comenzar</span>
+          <div class="arrow-down">↓</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Script principal como módulo ES6 -->
+    <script type="module" src="./src/main.js"></script>
+  </body>
 </html>
