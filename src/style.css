@@ -54,7 +54,7 @@ body {
 
 .hero__title {
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2.5rem, 6vw, 3rem);
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: 1.5rem;
@@ -62,7 +62,7 @@ body {
 }
 
 .hero__subtitle {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto 2.5rem;
@@ -162,7 +162,7 @@ body {
 
 /* Cada tarjeta/ventana individual */
 .step {
-  min-height: 60vh; /* Altura para dar separación vertical entre eventos */
+  min-height: 50vh; /* Altura para dar separación vertical entre eventos */
   display: flex;
   flex-direction: column;
   justify-content: center;
