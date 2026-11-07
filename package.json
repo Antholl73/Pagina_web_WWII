@@ -4,7 +4,9 @@
   "description": "proyecto de página web para contar la historia de la Segunda Guerra Mundial a partir de una página web interactiva",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
