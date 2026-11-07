@@ -100,3 +100,113 @@ body {
     transform: translateY(4px);
   }
 }
+
+/* --- ESTRUCTURA SCROLLYTELLING --- */
+
+/* El contenedor principal */
+.scrolly {
+  position: relative;
+  width: 100%;
+}
+
+/* 1. Fondo pegajoso (Sticky):
+       top: 0 y position: sticky hacen que se quede clavado en el visor
+       mientras el contenedor .scrolly siga en pantalla */
+.scrolly__graphic {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1; /* Queda detrás de los textos */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #1e1e1e 0%, #0d0d0d 100%);
+  border-bottom: 1px solid #333;
+}
+
+.graphic__placeholder {
+  text-align: center;
+  padding: 2rem;
+}
+
+.graphic__year {
+  font-family: var(--font-serif);
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.08); /* Número gigante tenue de fondo */
+  display: block;
+  user-select: none;
+  transition: all 0.5s ease;
+}
+
+#graphic-desc {
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  margin-top: -1rem;
+  font-weight: 700;
+}
+
+/* 2. Pasos de texto que suben con el scroll */
+.scrolly__steps {
+  position: relative;
+  z-index: 2; /* Por encima del gráfico */
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  /* El margen inferior permite que el último paso tenga espacio para ser scrolleado */
+  margin-bottom: 100vh;
+}
+
+/* Cada tarjeta/ventana individual */
+.step {
+  min-height: 60vh; /* Altura para dar separación vertical entre eventos */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 10vh;
+  padding: 2.5rem;
+  background: rgba(18, 18, 18, 0.85); /* Fondo semitransparente */
+  backdrop-filter: blur(10px); /* Efecto vidrio esmerilado */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  opacity: 0.35; /* Por defecto están atenuadas hasta que Scrollama las active */
+  transform: translateY(20px);
+}
+
+/* Estado cuando la tarjeta está activa */
+.step.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  border-color: var(--accent-color);
+}
+
+.step__badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+}
+
+.step__title {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.step__text {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
