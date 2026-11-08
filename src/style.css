@@ -4,22 +4,48 @@
   box-sizing: border-box;
 }
 
+/* --- RESET Y VARIABLES --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
-  --bg-color: #121212;
-  --text-primary: #f0f0f0;
-  --text-secondary: #a0a0a0;
-  --accent-color: #c93b2b; /* Rojo sobrio de énfasis */
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-sans:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Paleta de colores */
+  --paper-bg: #ece3cf; /* Papel periódico envejecido */
+  --paper-dark: #ded2ba; /* Sombras de pliegues y bordes desgastados */
+  --ink-primary: #181614; /* Tinta negra de imprenta */
+  --ink-secondary: #4a453e; /* Tinta secundaria de columnas */
+  --propaganda-red: #9c251a; /* Rojo carmesí */
+  --paper-card: #f4edd9; /* Papel de recorte para las tarjetas */
+  --ink-border: #2b2621; /* Filetes de imprenta */
+
+  /* Fuentes */
+  --font-headline: "Oswald", Impact, sans-serif;
+  --font-editorial: "Newsreader", Georgia, serif;
 }
 
 body {
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
+  background-color: var(--paper-bg);
+  color: var(--ink-primary);
+  font-family: var(--font-editorial);
   line-height: 1.6;
   overflow-x: hidden;
+  background-image:
+    radial-gradient(
+      ellipse at center,
+      rgba(236, 227, 207, 0.4) 0%,
+      rgba(200, 185, 155, 0.6) 100%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.015) 2px,
+      rgba(0, 0, 0, 0.015) 4px
+    );
+  background-attachment: fixed;
 }
 
 /* --- SECCIÓN HERO --- */
@@ -30,16 +56,13 @@ body {
   align-items: center;
   text-align: center;
   padding: 3rem 1.5rem;
-  background: radial-gradient(
-    circle at center,
-    #222222 0%,
-    var(--bg-color) 100%
-  );
+  /* Borde de imprenta superior e inferior */
+  border-bottom: 4px double var(--ink-border);
   position: relative;
 }
 
 .hero__content {
-  max-width: 900px;
+  max-width: 950px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,97 +70,98 @@ body {
 
 .hero__tag {
   display: inline-block;
-  font-size: 0.85rem;
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: 0.2rem;
-  color: var(--accent-color);
+  letter-spacing: 0.25rem;
+  color: var(--ink-secondary);
   text-transform: uppercase;
-  margin-bottom: 1.2rem;
+  border-bottom: 2px solid var(--ink-border);
+  padding-bottom: 0.3rem;
+  margin-bottom: 1.5rem;
 }
 
 .hero__title {
-  font-family: var(--font-serif);
-  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-family: var(--font-headline);
+  font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 900;
-  line-height: 1.15;
-  margin-bottom: 2rem;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--ink-primary);
+  margin-bottom: 1.5rem;
+  /* Filete doble encima y debajo del título principal */
+  border-top: 3px solid var(--ink-border);
+  border-bottom: 3px double var(--ink-border);
+  padding: 1.2rem 0;
+  width: 100%;
 }
 
-/* El subtítulo temático que acompaña al título principal */
 .hero__topic {
   display: block;
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-family: var(--font-editorial);
+  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
   font-weight: 400;
-  color: var(--text-secondary);
-  margin-top: 0.6rem;
+  font-style: italic;
+  text-transform: none;
+  color: var(--propaganda-red);
+  margin-top: 0.8rem;
   letter-spacing: 0;
 }
 
-/* Tarjeta destacada para la Pregunta Central */
+/* CAJA ROJA DE LA PREGUNTA CENTRAL (Inspirada en el bloque de Mussolini de tu foto) */
 .hero__question-box {
-  background: rgba(255, 255, 255, 0.03);
-  border-left: 4px solid var(--accent-color);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 0 8px 8px 0;
-  padding: 1.8rem 2.2rem;
-  margin: 0 auto 3rem;
-  max-width: 780px;
-  text-align: left;
-  backdrop-filter: blur(8px);
+  background-color: var(--propaganda-red);
+  color: #fff9ee;
+  border: 2px solid var(--ink-border);
+  box-shadow: 4px 4px 0px var(--ink-border); /* Sombra dura de imprenta */
+  padding: 2rem 2.5rem;
+  margin: 1.5rem auto 2.5rem;
+  max-width: 850px;
+  text-align: center;
+  position: relative;
 }
 
 .hero__question-label {
-  display: block;
-  font-size: 0.75rem;
+  display: inline-block;
+  font-family: var(--font-headline);
+  font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.15rem;
+  letter-spacing: 0.2rem;
   text-transform: uppercase;
-  color: var(--accent-color);
+  color: #ffd8d3;
   margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 0.2rem;
 }
 
 .hero__question-text {
-  font-family: var(--font-serif);
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
-  font-style: italic;
-  line-height: 1.6;
+  font-family: var(--font-headline);
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: #ffffff;
 }
 
-/* Indicador de scroll animado */
+/* Indicador de scroll */
 .hero__scroll-indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  letter-spacing: 0.1rem;
+  gap: 0.4rem;
+  font-family: var(--font-headline);
+  color: var(--ink-secondary);
+  font-size: 0.9rem;
+  letter-spacing: 0.15rem;
   text-transform: uppercase;
+  font-weight: 700;
 }
 
 .arrow-down {
-  font-size: 1.5rem;
-  animation: bounce 2s infinite ease-in-out;
-}
-/* Indicador de scroll animado */
-.hero__scroll-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  letter-spacing: 0.1rem;
-  text-transform: uppercase;
-}
-
-.arrow-down {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  color: var(--propaganda-red);
   animation: bounce 2s infinite ease-in-out;
 }
 
@@ -157,28 +181,25 @@ body {
   }
 }
 
-/* --- ESTRUCTURA SCROLLYTELLING --- */
+/* --- ESTRUCTURA SCROLLYTELLING ESTILO PRENSA --- */
 
-/* El contenedor principal */
 .scrolly {
   position: relative;
   width: 100%;
 }
 
-/* 1. Fondo pegajoso (Sticky):
-       top: 0 y position: sticky hacen que se quede clavado en el visor
-       mientras el contenedor .scrolly siga en pantalla */
+/* 1. Fondo pegajoso (Sticky): papel envejecido con marca de agua gigante */
 .scrolly__graphic {
   position: sticky;
   top: 0;
   width: 100%;
   height: 100vh;
-  z-index: 1; /* Queda detrás de los textos */
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #1e1e1e 0%, #0d0d0d 100%);
-  border-bottom: 1px solid #333;
+  background-color: var(--paper-bg);
+  border-bottom: 3px double var(--ink-border);
 }
 
 .graphic__placeholder {
@@ -187,95 +208,121 @@ body {
 }
 
 .graphic__year {
-  font-family: var(--font-serif);
-  font-size: clamp(4rem, 15vw, 10rem);
+  font-family: var(--font-headline);
+  font-size: clamp(5rem, 20vw, 14rem);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.08); /* Número gigante tenue de fondo */
+  color: rgba(
+    43,
+    38,
+    33,
+    0.08
+  ); /* Año gigante impreso como grabado sutil de fondo */
   display: block;
   user-select: none;
+  line-height: 0.85;
   transition: all 0.5s ease;
 }
 
 #graphic-desc {
-  font-size: 1.25rem;
-  color: var(--accent-color);
-  letter-spacing: 0.1rem;
-  text-transform: uppercase;
-  margin-top: -1rem;
+  font-family: var(--font-headline);
+  font-size: 1.4rem;
   font-weight: 700;
+  color: var(--propaganda-red);
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  border-top: 2px solid var(--ink-border);
+  border-bottom: 2px solid var(--ink-border);
+  display: inline-block;
+  padding: 0.4rem 1.2rem;
 }
 
-/* 2. Pasos de texto que suben con el scroll */
+/* 2. Pasos de texto: Como pliegos y recortes de periódico */
 .scrolly__steps {
   position: relative;
-  z-index: 2; /* Por encima del gráfico */
-  max-width: 600px;
+  z-index: 2;
+  max-width: 680px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  /* El margen inferior permite que el último paso tenga espacio para ser scrolleado */
-  margin-bottom: 100vh;
+  margin-bottom: 50vh;
 }
 
-/* Cada tarjeta/ventana individual */
 .step {
-  min-height: 50vh; /* Altura para dar separación vertical entre eventos */
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 10vh;
+  margin-bottom: 12vh;
   padding: 2.5rem;
-  background: rgba(18, 18, 18, 0.85); /* Fondo semitransparente */
-  backdrop-filter: blur(10px); /* Efecto vidrio esmerilado */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background-color: var(--paper-card);
+  border: 2px solid var(--ink-border);
+  box-shadow: 6px 6px 0px rgba(43, 38, 33, 0.85); /* Sombra sólida de recorte físico */
   transition:
     opacity 0.4s ease,
     transform 0.4s ease;
-  opacity: 0.35; /* Por defecto están atenuadas hasta que Scrollama las active */
+  opacity: 0.4;
   transform: translateY(20px);
 }
 
-/* Estado cuando la tarjeta está activa */
 .step.is-active {
   opacity: 1;
   transform: translateY(0);
-  border-color: var(--accent-color);
+  border-color: var(--propaganda-red);
+  box-shadow: 8px 8px 0px var(--propaganda-red);
 }
 
 .step__badge {
   display: inline-block;
   align-self: flex-start;
-  font-size: 0.75rem;
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.15rem;
-  color: var(--accent-color);
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.2rem;
+  color: var(--propaganda-red);
+  border-bottom: 1px solid var(--propaganda-red);
+  padding-bottom: 0.2rem;
+  margin-bottom: 1rem;
 }
 
 .step__title {
-  font-family: var(--font-serif);
-  font-size: 1.8rem;
+  font-family: var(--font-headline);
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   margin-bottom: 1rem;
-  color: #ffffff;
+  color: var(--ink-primary);
+  line-height: 1.1;
+  border-bottom: 1px solid var(--ink-border);
+  padding-bottom: 0.5rem;
 }
 
 .step__text {
-  font-size: 1.05rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
+  font-size: 1.15rem;
+  color: var(--ink-secondary);
+  line-height: 1.75;
+  text-align: justify; /* Justificado típico de las columnas de prensa */
+}
+
+.step__text strong {
+  color: var(--ink-primary);
+  font-weight: 700;
+}
+
+.step__text em {
+  font-style: italic;
+  color: var(--ink-primary);
 }
 
 .step__source {
   display: block;
-  margin-top: 1.2rem;
+  margin-top: 1.5rem;
   padding-top: 0.8rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  border-top: 1px dashed var(--ink-border);
+  font-size: 0.82rem;
+  color: var(--ink-secondary);
   font-style: italic;
-  letter-spacing: 0.02rem;
 }
 
 /* --- SECCIÓN VIDEO SCRUBBING --- */
