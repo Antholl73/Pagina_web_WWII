@@ -266,3 +266,14 @@ body {
   color: var(--text-secondary);
   line-height: 1.7;
 }
+
+.step__source {
+  display: block;
+  margin-top: 1.2rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  letter-spacing: 0.02rem;
+}

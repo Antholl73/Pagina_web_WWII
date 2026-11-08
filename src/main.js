@@ -10,10 +10,11 @@ const stepElements = document.querySelectorAll(".step");
 
 // 3. Diccionario con subtítulos históricos según el año
 const historicalData = {
-  1939: "Invasión de Polonia y estallido de la guerra",
-  1940: "Caída de Francia y Batalla de Inglaterra",
-  1941: "Operación Barbarroja y frente soviético",
-  1944: "Día D y el desembarco en Normandía",
+  1919: "Tratado de Versalles y la República de Weimar",
+  1922: "La Marcha sobre Roma y el Fascismo en Italia",
+  1929: "La Gran Depresión y la radicalización de masas",
+  1933: "Nombramiento de Hitler: Violencia, propaganda y élites",
+  1939: "El código ideológico expansionista y la Guerra Total",
 };
 
 // 4. Instanciamos Scrollama
