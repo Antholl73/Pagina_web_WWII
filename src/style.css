@@ -451,3 +451,17 @@ body {
   font-family: monospace;
   font-size: 1rem;
 }
+
+/* --- EFECTO DE TINTA DE IMPRENTA ---
+   Usa el filtro SVG #ink-rough definido al inicio de index.html:
+   bordes irregulares + pequeños huecos donde la tinta no cargó. */
+.hero__tag,
+.hero__title,
+.hero__question-label,
+.hero__question-text,
+#graphic-desc,
+.step__badge,
+.step__title,
+.caption__title {
+  filter: url(#ink-rough);
+}

@@ -17,6 +17,62 @@
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
+    <!-- FILTRO DE TINTA: bordes irregulares y huecos de tinta como en la imprenta de tipos móviles.
+         Se aplica desde CSS con  filter: url(#ink-rough)  -->
+    <svg
+      width="0"
+      height="0"
+      style="position: absolute"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <filter
+        id="ink-rough"
+        x="-2%"
+        y="-10%"
+        width="104%"
+        height="120%"
+        color-interpolation-filters="sRGB"
+      >
+        <!-- 1. Bordes: ruido de baja frecuencia que ondula el contorno
+             de las letras con suavidad (sin dispersar píxeles sueltos) -->
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.06"
+          numOctaves="3"
+          seed="4"
+          result="noise"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="noise"
+          scale="2.2"
+          xChannelSelector="R"
+          yChannelSelector="G"
+          result="rough"
+        />
+        <!-- 2. Tinta irregular: zonas algo más claras en vez de puntos
+             duros, como un tipo que no cargó la tinta de forma pareja -->
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.035"
+          numOctaves="2"
+          seed="11"
+          result="speck"
+        />
+        <feColorMatrix
+          in="speck"
+          type="matrix"
+          values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.8 1.38"
+          result="mask"
+        />
+        <feGaussianBlur in="mask" stdDeviation="0.6" result="softMask" />
+        <feComposite in="rough" in2="softMask" operator="in" result="inked" />
+        <!-- 3. Absorción del papel: bordes ligeramente suaves -->
+        <feGaussianBlur in="inked" stdDeviation="0.3" />
+      </filter>
+    </svg>
+
     <!-- SECCIÓN HERO: Portada y Pregunta de Investigación -->
     <header class="hero">
       <div class="hero__content">
