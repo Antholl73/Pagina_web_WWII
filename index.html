@@ -8,25 +8,39 @@
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
-    <!-- SECCIÓN HERO: Portada introductoria antes del scroll -->
+    <!-- SECCIÓN HERO: Portada y Pregunta de Investigación -->
     <header class="hero">
       <div class="hero__content">
-        <span class="hero__tag">1939 — 1945</span>
+        <!-- 1. Etiqueta temporal -->
+        <span class="hero__tag">1918 — 1939 | Periodo de Entreguerras</span>
+
+        <!-- 2. Titular jerárquico -->
         <h1 class="hero__title">
-          Segunda Guerra Mundial: Nacismo en Alemania y Fascismo en Italia.
+          Segunda Guerra Mundial
+          <span class="hero__topic"
+            >Nazismo en Alemania y Fascismo en Italia</span
+          >
         </h1>
-        <p class="hero__subtitle">
-          ¿Era la Segunda Guerra Mundial un choque evitable, o el único
-          resultado lógico y predecible del código ideológico del expansionismo
-          nazi y fascista?
-        </p>
+
+        <!-- 3. Tarjeta destacada de la Pregunta Central (Tesis) -->
+        <div class="hero__question-box">
+          <span class="hero__question-label"
+            >Pregunta Central de Investigación</span
+          >
+          <blockquote class="hero__question-text">
+            «¿Era la Segunda Guerra Mundial un choque evitable, o el único
+            resultado lógico y predecible del código ideológico del
+            expansionismo nazi y fascista?»
+          </blockquote>
+        </div>
+
+        <!-- 4. Llamado al scroll -->
         <div class="hero__scroll-indicator">
-          <span>Desplaza para comenzar</span>
+          <span>Explorar crónica interactiva</span>
           <div class="arrow-down">↓</div>
         </div>
       </div>
     </header>
-
     <!-- SECCIÓN SCROLLYTELLING: Crónica interactiva -->
     <section class="scrolly" id="scrolly-ww2">
       <!-- 1. FONDO FIJO (Sticky): Se queda anclado en pantalla mientras hacemos scroll -->
