@@ -60,76 +60,100 @@ function init() {
 }
 
 // =======================================================
-// 7. MOTOR DE VIDEO SCRUBBING CON SUAVIZADO (LERP/INERCIA)
+// 7. VIDEO SCRUBBING: EL SCROLL CONTROLA EL FOTOGRAMA
 // =======================================================
+//
+// Idea general:
+//   scroll  ──►  progreso (0 a 1)  ──►  tiempo objetivo  ──►  suavizado  ──►  video.currentTime
 
 const videoSection = document.getElementById("video-scrub-section");
 const scrubVideo = document.getElementById("scrub-video");
 const progressText = document.getElementById("video-progress-text");
 
-let targetTime = 0; // El segundo exacto al que el scroll quiere ir
-let isVideoReady = false; // Bandera para saber si el video ya cargó su duración
+const VIDEO_FPS = 30; // Fotogramas por segundo del archivo recodificado
+const FRAME = 1 / VIDEO_FPS; // Duración de un fotograma en segundos
+const SMOOTHING = 10; // Velocidad del suavizado: más alto = sigue al scroll más rápido
 
-if (scrubVideo) {
-  scrubVideo.pause();
+let targetTime = 0; // Tiempo que "pide" el scroll
+let smoothTime = 0; // Tiempo suavizado que se va acercando al objetivo
+let lastFrameStamp = 0; // Marca de tiempo del fotograma anterior del bucle
+let rafId = null; // Identificador del bucle (null = apagado)
+let lastPercent = -1; // Último porcentaje escrito, para no tocar el DOM si no cambia
 
-  // Confirmamos que el video cargó sus metadatos
-  scrubVideo.addEventListener("loadedmetadata", () => {
-    isVideoReady = true;
-    console.log(
-      `Video listo para scrubbing. Duración: ${scrubVideo.duration.toFixed(2)}s`,
-    );
-  });
-}
-
-// 1. Calculamos el objetivo de tiempo según el scroll (función ultra ligera)
-function calculateScrollProgress() {
-  if (!videoSection || !scrubVideo || !isVideoReady) return;
-
+// A. Progreso del scroll dentro de la sección (0 al entrar, 1 al salir)
+function getScrollProgress() {
   const rect = videoSection.getBoundingClientRect();
-  const totalScrollDistance = rect.height - window.innerHeight;
-  const pixelsScrolled = -rect.top;
+  const scrollable = rect.height - window.innerHeight; // Recorrido mientras el video está fijo
+  if (scrollable <= 0) return 0;
+  return Math.min(1, Math.max(0, -rect.top / scrollable));
+}
 
-  let progress = pixelsScrolled / totalScrollDistance;
-  progress = Math.max(0, Math.min(1, progress));
+// B. Bucle de animación: se ejecuta una vez por cada refresco de pantalla
+function tick(now) {
+  rafId = requestAnimationFrame(tick);
 
-  // Actualizamos el tiempo meta al que queremos que llegue el video
-  targetTime = progress * scrubVideo.duration;
+  const duration = scrubVideo.duration;
+  if (!duration) return; // Aún no se conocen los metadatos del video
 
-  if (progressText) {
-    progressText.textContent = `${Math.round(progress * 100)}%`;
+  // dt: segundos desde el último fotograma (limitado por si la pestaña estuvo en segundo plano)
+  const dt = Math.min(0.1, (now - (lastFrameStamp || now)) / 1000);
+  lastFrameStamp = now;
+
+  // 1. Del scroll al tiempo objetivo. El último fotograma está un poco antes de "duration".
+  const progress = getScrollProgress();
+  targetTime = progress * (duration - FRAME);
+
+  // 2. Suavizado exponencial independiente de los FPS del monitor (60 Hz, 144 Hz...):
+  //    en cada fotograma recorre una fracción de la distancia que falta.
+  const ease = 1 - Math.exp(-SMOOTHING * dt);
+  smoothTime += (targetTime - smoothTime) * ease;
+
+  // 3. Redondeamos al fotograma exacto más cercano del video
+  const frameTime = Math.round(smoothTime * VIDEO_FPS) / VIDEO_FPS;
+
+  // 4. Sólo pedimos un fotograma nuevo si el anterior ya se dibujó y si de verdad cambia
+  if (!scrubVideo.seeking && Math.abs(scrubVideo.currentTime - frameTime) >= FRAME / 2) {
+    scrubVideo.currentTime = frameTime;
+  }
+
+  // 5. Texto de progreso: sólo se actualiza cuando cambia el número
+  const percent = Math.round(progress * 100);
+  if (progressText && percent !== lastPercent) {
+    progressText.textContent = `${percent}%`;
+    lastPercent = percent;
   }
 }
 
-// Escuchamos el scroll con passive: true para que el navegador no bloquee el hilo visual
-window.addEventListener("scroll", calculateScrollProgress, { passive: true });
-
-// 2. Bucle de renderizado continuo: aproxima suavemente el video hacia targetTime
-function renderSmoothVideo() {
-  if (isVideoReady && scrubVideo.duration) {
-    // Calculamos la distancia entre dónde está el video y a dónde debe ir
-    const delta = targetTime - scrubVideo.currentTime;
-
-    // Solo actualizamos si hay diferencia y el decodificador NO está saturado buscando
-    if (Math.abs(delta) > 0.03 && !scrubVideo.seeking) {
-      // Avanzamos un 15% de la distancia restante en cada cuadro (efecto inercia/amortiguador)
-      const nextTime = scrubVideo.currentTime + delta * 0.15;
-
-      // Usamos fastSeek si el navegador lo soporta, o currentTime estándar
-      if ("fastSeek" in scrubVideo) {
-        scrubVideo.fastSeek(nextTime);
-      } else {
-        scrubVideo.currentTime = nextTime;
-      }
-    }
+function startLoop() {
+  if (rafId !== null) return;
+  // Al volver a la sección colocamos el video directamente donde toca, sin "rebobinar" animado
+  if (scrubVideo.duration) {
+    smoothTime = getScrollProgress() * (scrubVideo.duration - FRAME);
   }
-
-  // Solicitamos el siguiente cuadro
-  requestAnimationFrame(renderSmoothVideo);
+  lastFrameStamp = 0;
+  rafId = requestAnimationFrame(tick);
 }
 
-// Arrancamos el bucle de suavizado
-requestAnimationFrame(renderSmoothVideo);
+function stopLoop() {
+  if (rafId === null) return;
+  cancelAnimationFrame(rafId);
+  rafId = null;
+}
+
+function initVideoScrub() {
+  if (!videoSection || !scrubVideo) return;
+
+  scrubVideo.pause(); // El video nunca se reproduce solo: lo mueve el scroll
+
+  // C. Encendemos el bucle sólo cuando la sección está en pantalla (ahorra CPU y batería)
+  const observer = new IntersectionObserver(
+    ([entry]) => (entry.isIntersecting ? startLoop() : stopLoop()),
+    { rootMargin: "100px 0px" } // Arranca un poco antes de que la sección aparezca
+  );
+  observer.observe(videoSection);
+}
+
+initVideoScrub();
 
 // Ejecutamos la inicialización al cargar el script
 init();
