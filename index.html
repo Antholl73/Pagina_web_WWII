@@ -41,51 +41,110 @@
         </div>
       </div>
     </header>
-    <!-- SECCIÓN SCROLLYTELLING: Crónica interactiva -->
+    <!-- SECCIÓN SCROLLYTELLING: Contexto Histórico y Ascenso Totalitario -->
     <section class="scrolly" id="scrolly-ww2">
-      <!-- 1. FONDO FIJO (Sticky): Se queda anclado en pantalla mientras hacemos scroll -->
+      <!-- 1. FONDO FIJO (Sticky): Se actualiza conforme avanzas -->
       <div class="scrolly__graphic">
         <div class="graphic__container">
-          <!-- Este texto cambiará dinámicamente con JavaScript en el siguiente paso -->
           <div class="graphic__placeholder">
-            <span class="graphic__year" id="current-year">1939</span>
-            <p id="graphic-desc">El inicio del conflicto en Europa</p>
+            <span class="graphic__year" id="current-year">1919</span>
+            <p id="graphic-desc">
+              Tratado de Versalles y la República de Weimar
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- 2. VENTANAS NARRATIVAS (Steps): Flotan y se desplazan sobre el fondo -->
+      <!-- 2. VENTANAS NARRATIVAS (Steps): La crónica histórica -->
       <article class="scrolly__steps">
-        <!-- Paso 1 -->
-        <div class="step" data-step="1" data-year="1939">
-          <span class="step__badge">Fase 1</span>
-          <h2 class="step__title">1939</h2>
-          <p class="step__text">Las fuerzas alemanas invaden Polonia.</p>
+        <!-- Paso 1: Versalles y Weimar -->
+        <div class="step" data-step="1" data-year="1919">
+          <span class="step__badge">Alemania · Fase 1</span>
+          <h2 class="step__title">1919: Las Cenizas de Versalles</h2>
+          <p class="step__text">
+            Tras la derrota de 1918, la naciente
+            <strong>República de Weimar</strong> afrontó una severa
+            inestabilidad política y económica. El
+            <em>Tratado de Versalles</em> impuso duras pérdidas territoriales,
+            drásticos límites militares y onerosas reparaciones económicas, que
+            fueron instrumentalizadas por la extrema derecha para socavar la
+            legitimidad democrática mediante el mito de la «puñalada por la
+            espalda».
+          </p>
+          <cite class="step__source"
+            >Fuentes: USHMM (s. f.-a); The Avalon Project (1919)</cite
+          >
         </div>
 
-        <!-- Paso 2 -->
-        <div class="step" data-step="2" data-year="1940">
-          <span class="step__badge">Fase 2</span>
-          <h2 class="step__title">1940</h2>
-          <p class="step__text">Francia cae.</p>
+        <!-- Paso 2: Italia y el Fascismo -->
+        <div class="step" data-step="2" data-year="1922">
+          <span class="step__badge">Italia · Fase 2</span>
+          <h2 class="step__title">1922: La Marcha sobre Roma</h2>
+          <p class="step__text">
+            Aunque vencedora formal en la Gran Guerra, Italia emergió sumida en
+            el descontento popular por una «victoria mutilada», hiperinflación y
+            aguda conflictividad social. El movimiento fascista de
+            <strong>Benito Mussolini</strong> capitalizó el pánico burgués al
+            socialismo, consolidando su poder gracias a la violencia paramilitar
+            de los Camisas Negras y la permisividad de las élites monárquicas e
+            industriales.
+          </p>
+          <cite class="step__source">Fuente: Williamson (2023)</cite>
         </div>
 
-        <!-- Paso 3 -->
-        <div class="step" data-step="3" data-year="1941">
-          <span class="step__badge">Fase 3</span>
-          <h2 class="step__title">1941</h2>
-          <p class="step__text">Alemania rompe el pacto de no agresión.</p>
+        <!-- Paso 3: Crack del 29 -->
+        <div class="step" data-step="3" data-year="1929">
+          <span class="step__badge">Alemania · Fase 3</span>
+          <h2 class="step__title">1929: La Gran Depresión</h2>
+          <p class="step__text">
+            El colapso de Wall Street golpeó con fuerza devastadora a Alemania,
+            disparando el desempleo a más de 6 millones y quebrando la confianza
+            en las instituciones republicanas. El Partido Nazi pasó de ser un
+            grupo marginal a una fuerza electoral masiva, prometiendo
+            restauración económica, empleo y orden, mientras intensificaba una
+            agresiva propaganda antisemita como chivo expiatorio.
+          </p>
+          <cite class="step__source">Fuentes: USHMM (s. f.-b; s. f.-c)</cite>
         </div>
 
-        <!-- Paso 4 -->
-        <div class="step" data-step="4" data-year="1944">
-          <span class="step__badge">Fase 4</span>
-          <h2 class="step__title">1944</h2>
-          <p class="step__text">liberación de Europa.</p>
+        <!-- Paso 4: Toma del poder y élites -->
+        <div class="step" data-step="4" data-year="1933">
+          <span class="step__badge">Alemania · Fase 4</span>
+          <h2 class="step__title">1933: Violencia, Propaganda y Élites</h2>
+          <p class="step__text">
+            La crisis material no explica por sí sola la caída de la democracia.
+            El ascenso autoritario requirió de una tríada decisiva: el terror
+            callejero de las <em>SA</em>, el aparato de propaganda moderna y, de
+            forma crucial,
+            <strong
+              >las decisiones deliberadas de las élites tradicionales</strong
+            >
+            (industriales, terratenientes y militares), quienes facilitaron el
+            nombramiento de Hitler como canciller creyendo erróneamente que
+            podrían controlarlo.
+          </p>
+          <cite class="step__source">Fuente: USHMM (s. f.-c)</cite>
+        </div>
+
+        <!-- Paso 5: Expansionismo y guerra -->
+        <div class="step" data-step="5" data-year="1939">
+          <span class="step__badge">Alemania e Italia · Fase 5</span>
+          <h2 class="step__title">1939: El Código Ideológico en Marcha</h2>
+          <p class="step__text">
+            El expansionismo no era un accidente diplomático, sino el núcleo
+            doctrinal de ambos regímenes: el <em>Lebensraum</em> (Espacio Vital)
+            alemán y el <em>Spazio Vitale</em> italiano exigían la conquista
+            armada como mandato biológico e imperial. Tras el rearme, la alianza
+            en el <em>Pacto de Acero</em> y las sucesivas anexiones toleradas
+            por Europa, la invasión de Polonia en septiembre de 1939 marcó el
+            estallido inevitable de la conflagración mundial.
+          </p>
+          <cite class="step__source"
+            >Conexión con la Pregunta Central de Tesis</cite
+          >
         </div>
       </article>
     </section>
-
     <!-- Script principal como módulo ES6 -->
     <script type="module" src="./src/main.js"></script>
   </body>
