@@ -277,3 +277,109 @@ body {
   font-style: italic;
   letter-spacing: 0.02rem;
 }
+
+/* --- SECCIÓN VIDEO SCRUBBING --- */
+
+/* 1. La pista de scroll: define qué tan largo es el recorrido para reproducir el video */
+.video-scrub {
+  position: relative;
+  height: 1000vh;
+  background-color: #000;
+}
+
+/* 2. El visor fijado a la pantalla */
+.video-scrub__sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3. El elemento de video a pantalla completa */
+.video-scrub__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que llene la pantalla sin deformarse */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* 4. Viñeta oscura sobre el video para que el texto sea legible */
+.video-scrub__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  z-index: 2;
+  pointer-events: none; /* Permite hacer clic o scroll a través de él */
+}
+
+/* 5. Tarjeta explicativa sobre el video */
+.video-scrub__caption {
+  position: relative;
+  z-index: 3;
+  max-width: 650px;
+  padding: 2.5rem;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  margin: 0 1.5rem;
+}
+
+.caption__tag {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+}
+
+.caption__title {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.caption__desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.caption__progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.8rem;
+}
+
+#video-progress-text {
+  color: var(--accent-color);
+  font-family: monospace;
+  font-size: 1rem;
+}

@@ -59,5 +59,77 @@ function init() {
   window.addEventListener("resize", scroller.resize);
 }
 
+// =======================================================
+// 7. MOTOR DE VIDEO SCRUBBING CON SUAVIZADO (LERP/INERCIA)
+// =======================================================
+
+const videoSection = document.getElementById("video-scrub-section");
+const scrubVideo = document.getElementById("scrub-video");
+const progressText = document.getElementById("video-progress-text");
+
+let targetTime = 0; // El segundo exacto al que el scroll quiere ir
+let isVideoReady = false; // Bandera para saber si el video ya cargó su duración
+
+if (scrubVideo) {
+  scrubVideo.pause();
+
+  // Confirmamos que el video cargó sus metadatos
+  scrubVideo.addEventListener("loadedmetadata", () => {
+    isVideoReady = true;
+    console.log(
+      `Video listo para scrubbing. Duración: ${scrubVideo.duration.toFixed(2)}s`,
+    );
+  });
+}
+
+// 1. Calculamos el objetivo de tiempo según el scroll (función ultra ligera)
+function calculateScrollProgress() {
+  if (!videoSection || !scrubVideo || !isVideoReady) return;
+
+  const rect = videoSection.getBoundingClientRect();
+  const totalScrollDistance = rect.height - window.innerHeight;
+  const pixelsScrolled = -rect.top;
+
+  let progress = pixelsScrolled / totalScrollDistance;
+  progress = Math.max(0, Math.min(1, progress));
+
+  // Actualizamos el tiempo meta al que queremos que llegue el video
+  targetTime = progress * scrubVideo.duration;
+
+  if (progressText) {
+    progressText.textContent = `${Math.round(progress * 100)}%`;
+  }
+}
+
+// Escuchamos el scroll con passive: true para que el navegador no bloquee el hilo visual
+window.addEventListener("scroll", calculateScrollProgress, { passive: true });
+
+// 2. Bucle de renderizado continuo: aproxima suavemente el video hacia targetTime
+function renderSmoothVideo() {
+  if (isVideoReady && scrubVideo.duration) {
+    // Calculamos la distancia entre dónde está el video y a dónde debe ir
+    const delta = targetTime - scrubVideo.currentTime;
+
+    // Solo actualizamos si hay diferencia y el decodificador NO está saturado buscando
+    if (Math.abs(delta) > 0.03 && !scrubVideo.seeking) {
+      // Avanzamos un 15% de la distancia restante en cada cuadro (efecto inercia/amortiguador)
+      const nextTime = scrubVideo.currentTime + delta * 0.15;
+
+      // Usamos fastSeek si el navegador lo soporta, o currentTime estándar
+      if ("fastSeek" in scrubVideo) {
+        scrubVideo.fastSeek(nextTime);
+      } else {
+        scrubVideo.currentTime = nextTime;
+      }
+    }
+  }
+
+  // Solicitamos el siguiente cuadro
+  requestAnimationFrame(renderSmoothVideo);
+}
+
+// Arrancamos el bucle de suavizado
+requestAnimationFrame(renderSmoothVideo);
+
 // Ejecutamos la inicialización al cargar el script
 init();

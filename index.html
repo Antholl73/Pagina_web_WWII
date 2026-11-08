@@ -41,6 +41,7 @@
         </div>
       </div>
     </header>
+
     <!-- SECCIÓN SCROLLYTELLING: Contexto Histórico y Ascenso Totalitario -->
     <section class="scrolly" id="scrolly-ww2">
       <!-- 1. FONDO FIJO (Sticky): Se actualiza conforme avanzas -->
@@ -145,6 +146,46 @@
         </div>
       </article>
     </section>
+
+    <!-- SECCIÓN PRODUCCIÓN AUDIOVISUAL: Video Scrubbing -->
+    <section class="video-scrub" id="video-scrub-section">
+      <!-- Contenedor Sticky: Se queda fijo mientras recorremos los 300vh -->
+      <div class="video-scrub__sticky">
+        <!-- Video con atributos esenciales para control por script:
+    		 muted y playsinline son obligatorios para que los navegadores modernos permitan controlarlo -->
+        <video
+          id="scrub-video"
+          class="video-scrub__media"
+          src="/videos/loading_screen_ultrakill.mp4"
+          preload="auto"
+          muted
+          playsinline
+        ></video>
+
+        <!-- Capa de oscurecimiento cinematográfico para legibilidad -->
+        <div class="video-scrub__overlay"></div>
+
+        <!-- Texto explicativo que acompaña al video -->
+        <div class="video-scrub__caption">
+          <span class="caption__tag"
+            >Archivo Histórico · Producción Audiovisual</span
+          >
+          <h2 class="caption__title">
+            La Maquinaria de la Propaganda y Movilización
+          </h2>
+          <p class="caption__desc">
+            Desplaza el cursor lentamente para controlar los fotogramas del
+            archivo. Observa la coreografía de masas y la estética monumental
+            utilizada para subordinar al individuo ante el Estado totalitario.
+          </p>
+          <div class="caption__progress">
+            <span>Progreso del metraje:</span>
+            <span id="video-progress-text">0%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Script principal como módulo ES6 -->
     <script type="module" src="./src/main.js"></script>
   </body>
