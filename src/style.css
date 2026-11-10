@@ -342,6 +342,46 @@ body {
   font-style: italic;
 }
 
+/* Fotografías documentales enmarcadas como recortes de prensa */
+.press-photo {
+  margin-top: 1.4rem;
+  padding: 0.55rem;
+  background: #e2d6bc;
+  border: 1px solid var(--ink-border);
+  box-shadow: 2px 2px 0 rgba(43, 38, 33, 0.35);
+}
+
+.press-photo img {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  filter: grayscale(100%) sepia(18%) contrast(1.05);
+  border: 1px solid rgba(43, 38, 33, 0.45);
+}
+
+.press-photo figcaption {
+  padding: 0.55rem 0.2rem 0.1rem;
+  font-family: var(--font-editorial);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: var(--ink-primary);
+}
+
+.press-photo figcaption span {
+  display: block;
+  margin-top: 0.28rem;
+  font-size: 0.72rem;
+  color: var(--ink-secondary);
+  font-style: italic;
+}
+
+.press-photo a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* --- SECCIÓN VIDEO SCRUBBING --- */
 
 /* 1. La pista de scroll: define qué tan largo es el recorrido para reproducir el video */
