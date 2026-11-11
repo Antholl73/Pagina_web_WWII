@@ -54,6 +54,162 @@ body {
   overflow-x: hidden;
 }
 
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #f2ead8;
+  background: #060606;
+  isolation: isolate;
+}
+
+.intro::before,
+.intro::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.intro::before {
+  background: radial-gradient(ellipse at center, rgba(104, 93, 70, 0.26), transparent 58%);
+  animation: intro-flicker 1.8s steps(2, end) both;
+}
+
+.intro::after {
+  background: linear-gradient(90deg, #000 0%, transparent 13%, transparent 87%, #000 100%);
+}
+
+.intro__noise {
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  opacity: 0.2;
+  background-image: var(--tex-grain);
+  animation: intro-noise 0.16s steps(2, end) infinite;
+}
+
+.intro__scanlines {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(235, 225, 202, 0.22) 3px 4px);
+  mix-blend-mode: screen;
+}
+
+.intro__frame {
+  position: relative;
+  width: min(84vw, 620px);
+  padding: 2rem 2.25rem;
+  text-align: center;
+  border-top: 1px solid rgba(242, 234, 216, 0.7);
+  border-bottom: 1px solid rgba(242, 234, 216, 0.7);
+  animation: intro-frame-in 1.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro__label,
+.intro__message {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.intro__label {
+  display: block;
+  margin-bottom: 1.1rem;
+  font-size: 0.72rem;
+  color: #b32e21;
+}
+
+.intro__message {
+  margin-top: 1rem;
+  font-size: clamp(1rem, 2.8vw, 1.5rem);
+}
+
+.intro__signal {
+  width: 100%;
+  height: 5px;
+  overflow: hidden;
+  background: rgba(242, 234, 216, 0.16);
+}
+
+.intro__signal span {
+  display: block;
+  width: 35%;
+  height: 100%;
+  background: #d13a2c;
+  box-shadow: 0 0 18px #d13a2c;
+  animation: intro-signal 1.3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.intro.is-complete {
+  pointer-events: none;
+  animation: intro-reveal 1.05s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes intro-frame-in {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.05);
+  }
+  45% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-flicker {
+  0%,
+  12%,
+  22%,
+  38% {
+    opacity: 0;
+  }
+  16%,
+  30%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-noise {
+  to {
+    transform: translate3d(4%, -3%, 0);
+  }
+}
+
+@keyframes intro-signal {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes intro-reveal {
+  0% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  55% {
+    clip-path: inset(47% 0 47% 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(50% 0 50% 0);
+    opacity: 0;
+  }
+}
+
 /* ==========================================================================
    3. EFECTOS DE IMPRESIÓN
    ========================================================================== */
@@ -186,22 +342,17 @@ body {
 .arrow-down {
   font-size: 1.6rem;
   color: var(--propaganda-red);
-  animation: bounce 2s infinite ease-in-out;
+  animation: float-down 1.8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  will-change: transform;
 }
 
-@keyframes bounce {
+@keyframes float-down {
   0%,
-  20%,
-  50%,
-  80%,
   100% {
     transform: translateY(0);
   }
-  40% {
-    transform: translateY(8px);
-  }
-  60% {
-    transform: translateY(4px);
+  50% {
+    transform: translateY(7px);
   }
 }
 
@@ -238,6 +389,21 @@ body {
   text-align: center;
 }
 
+.graphic__placeholder.is-changing {
+  animation: graphic-refresh 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes graphic-refresh {
+  from {
+    opacity: 0.5;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .graphic__year {
   display: block;
   font-family: var(--font-headline);
@@ -246,7 +412,7 @@ body {
   line-height: 0.85;
   color: rgba(43, 38, 33, 0.15);
   user-select: none;
-  transition: all 0.5s ease;
+  transition: color 0.45s ease, opacity 0.45s ease;
 }
 
 #graphic-desc {
@@ -294,8 +460,10 @@ body {
   opacity: 0.4;
   transform: translateY(20px);
   transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
 }
 
 .step.is-active {
@@ -303,6 +471,45 @@ body {
   transform: translateY(0);
   border-color: var(--propaganda-red);
   box-shadow: 8px 8px 0 var(--propaganda-red);
+}
+
+.step > * {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.step:not(.is-active) > * {
+  opacity: 0.78;
+}
+
+.step.is-active > * {
+  animation: step-content-in 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.step.is-active > :nth-child(2) {
+  animation-delay: 0.05s;
+}
+
+.step.is-active > :nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+.step.is-active > :nth-child(4) {
+  animation-delay: 0.15s;
+}
+
+.step.is-active > :nth-child(5) {
+  animation-delay: 0.2s;
+}
+
+@keyframes step-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .step__badge {
@@ -430,6 +637,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: translateZ(0);
 }
 
 .video-scrub__overlay {
@@ -460,6 +668,7 @@ body {
   border-left: 4px solid var(--propaganda-red);
   border-radius: 8px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  transform: translateZ(0);
 }
 
 .caption__tag {
@@ -506,4 +715,15 @@ body {
   font-family: monospace;
   font-size: 1rem;
   color: var(--propaganda-red);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

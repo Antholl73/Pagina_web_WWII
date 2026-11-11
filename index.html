@@ -17,6 +17,15 @@
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
+    <div class="intro" id="intro" role="status" aria-live="polite">
+      <div class="intro__noise"></div>
+      <div class="intro__scanlines"></div>
+      <div class="intro__frame">
+        <span class="intro__label">Archivo audiovisual</span>
+        <div class="intro__signal"><span></span></div>
+        <p class="intro__message">Iniciando cinta histórica</p>
+      </div>
+    </div>
     <!-- FILTRO DE TINTA: bordes irregulares y huecos de tinta como en la imprenta de tipos móviles.
          Se aplica desde CSS con  filter: url(#ink-rough)  -->
     <svg
