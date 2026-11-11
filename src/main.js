@@ -1,16 +1,7 @@
 import scrollama from "scrollama";
 
-const currentYearEl = document.getElementById("current-year");
-const graphicDescEl = document.getElementById("graphic-desc");
-const graphicEl = document.querySelector(".graphic__placeholder");
+const timelineYearEl = document.getElementById("timeline-year");
 const stepElements = document.querySelectorAll(".step");
-const historicalData = {
-  1919: "Tratado de Versalles y la República de Weimar",
-  1922: "La Marcha sobre Roma y el Fascismo en Italia",
-  1929: "La Gran Depresión y la radicalización de masas",
-  1933: "Nombramiento de Hitler: Violencia, propaganda y élites",
-  1939: "El código ideológico expansionista y la Guerra Total",
-};
 
 const scroller = scrollama();
 const introEl = document.getElementById("intro");
@@ -18,7 +9,9 @@ const introEl = document.getElementById("intro");
 function initIntro() {
   if (!introEl) return;
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
   const reveal = () => {
     introEl.classList.add("is-complete");
     window.setTimeout(() => introEl.remove(), reduceMotion ? 20 : 1150);
@@ -27,21 +20,29 @@ function initIntro() {
   window.setTimeout(reveal, reduceMotion ? 80 : 1800);
 }
 
-function updateGraphic(year) {
-  if (!year || !historicalData[year]) return;
+function updateTimeline(year) {
+  if (!timelineYearEl || !year) return;
 
-  currentYearEl.textContent = year;
-  graphicDescEl.textContent = historicalData[year];
+  // Si ya muestra ese año (por ejemplo, al volver a la misma tarjeta), no hacemos nada
+  if (timelineYearEl.textContent === year) return;
 
-  if (graphicEl) {
-    graphicEl.classList.remove("is-changing");
-    requestAnimationFrame(() => graphicEl.classList.add("is-changing"));
-  }
+  // Cada cifra en su propia caja: "1922" → <span>1</span><span>9</span>...
+  const digits = [...year].map(
+    (digit) => `<span class="timeline__digit">${digit}</span>`,
+  );
+  timelineYearEl.innerHTML = digits.join("");
+
+  // Reinicia el fundido: quitar la clase, forzar al navegador a notarlo, volver a ponerla
+  timelineYearEl.classList.remove("is-changing");
+  void timelineYearEl.offsetWidth;
+  timelineYearEl.classList.add("is-changing");
 }
 
 function handleStepEnter({ element }) {
-  stepElements.forEach((step) => step.classList.toggle("is-active", step === element));
-  updateGraphic(element.dataset.year);
+  stepElements.forEach((step) =>
+    step.classList.toggle("is-active", step === element),
+  );
+  updateTimeline(element.dataset.year);
 }
 
 function initScrollytelling() {
@@ -101,7 +102,10 @@ function tick(now) {
   smoothTime += (targetTime - smoothTime) * ease;
 
   const frameTime = Math.round(smoothTime * VIDEO_FPS) / VIDEO_FPS;
-  if (!scrubVideo.seeking && Math.abs(scrubVideo.currentTime - frameTime) >= FRAME) {
+  if (
+    !scrubVideo.seeking &&
+    Math.abs(scrubVideo.currentTime - frameTime) >= FRAME
+  ) {
     scrubVideo.currentTime = frameTime;
   }
 }
@@ -134,7 +138,7 @@ function initVideoScrub() {
       if (isVideoVisible) startLoop();
       else stopLoop();
     },
-    { rootMargin: "160px 0px" }
+    { rootMargin: "160px 0px" },
   );
 
   observer.observe(videoSection);

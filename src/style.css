@@ -75,12 +75,22 @@ body {
 }
 
 .intro::before {
-  background: radial-gradient(ellipse at center, rgba(104, 93, 70, 0.26), transparent 58%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(104, 93, 70, 0.26),
+    transparent 58%
+  );
   animation: intro-flicker 1.8s steps(2, end) both;
 }
 
 .intro::after {
-  background: linear-gradient(90deg, #000 0%, transparent 13%, transparent 87%, #000 100%);
+  background: linear-gradient(
+    90deg,
+    #000 0%,
+    transparent 13%,
+    transparent 87%,
+    #000 100%
+  );
 }
 
 .intro__noise {
@@ -96,7 +106,11 @@ body {
   position: absolute;
   inset: 0;
   opacity: 0.2;
-  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(235, 225, 202, 0.22) 3px 4px);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 3px,
+    rgba(235, 225, 202, 0.22) 3px 4px
+  );
   mix-blend-mode: screen;
 }
 
@@ -219,7 +233,7 @@ body {
 .hero__title,
 .hero__question-label,
 .hero__question-text,
-#graphic-desc,
+.timeline__year,
 .step__badge,
 .step__title,
 .caption__title {
@@ -374,29 +388,54 @@ body {
   z-index: 1;
   width: 100%;
   height: 100vh;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: clamp(2rem, 8vw, 8rem);
   background-color: var(--paper-bg);
   background-image: var(--paper-texture);
   border-bottom: 3px double var(--ink-border);
 }
 
-.graphic__placeholder {
-  max-width: 480px;
-  padding: 2rem;
+.timeline {
+  position: absolute;
+  top: 12vh;
+  bottom: 12vh;
+  right: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.timeline::before,
+.timeline::after {
+  content: "";
+  flex: 1;
+  width: 2px;
+  background-color: rgba(43, 38, 33, 0.65);
+}
+
+.timeline__year {
+  display: flex;
+  gap: 0.2rem;
+  font-family: var(--font-headline);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.timeline__digit {
+  width: 0.58em;
   text-align: center;
 }
 
-.graphic__placeholder.is-changing {
-  animation: graphic-refresh 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+/* Fundido al cambiar de año (main.js añade la clase) */
+.timeline__year.is-changing {
+  animation: timeline-year-in 0.45s ease-out;
 }
 
-@keyframes graphic-refresh {
+@keyframes timeline-year-in {
   from {
-    opacity: 0.5;
-    transform: translateY(10px);
+    opacity: 0;
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -404,29 +443,14 @@ body {
   }
 }
 
-.graphic__year {
-  display: block;
-  font-family: var(--font-headline);
-  font-size: clamp(3.5rem, 8vw, 7.5rem);
-  font-weight: 900;
-  line-height: 0.85;
-  color: rgba(43, 38, 33, 0.15);
-  user-select: none;
-  transition: color 0.45s ease, opacity 0.45s ease;
-}
+@media (max-width: 700px) {
+  .timeline {
+    right: 0.75rem;
+  }
 
-#graphic-desc {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.4rem 1.2rem;
-  font-family: var(--font-headline);
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: 0.15rem;
-  text-transform: uppercase;
-  color: var(--propaganda-red);
-  border-top: 2px solid var(--ink-border);
-  border-bottom: 2px solid var(--ink-border);
+  .timeline__year {
+    font-size: 1rem;
+  }
 }
 
 /* z-index 2: las tarjetas pasan por encima del fondo fijo */
@@ -474,7 +498,9 @@ body {
 }
 
 .step > * {
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
 }
 
 .step:not(.is-active) > * {

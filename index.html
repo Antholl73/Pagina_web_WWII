@@ -119,14 +119,15 @@
     <section class="scrolly" id="scrolly-ww2">
       <!-- 1. FONDO FIJO (Sticky): Se actualiza conforme avanzas -->
       <div class="scrolly__graphic">
-        <div class="graphic__container">
-          <div class="graphic__placeholder">
-            <span class="graphic__year" id="current-year">1919</span>
-            <p id="graphic-desc">
-              Tratado de Versalles y la República de Weimar
-            </p>
-          </div>
-        </div>
+        <!-- Línea del tiempo: main.js cambia el año al pasar de tarjeta -->
+        <aside class="timeline" aria-hidden="true">
+          <span class="timeline__year" id="timeline-year"
+            ><span class="timeline__digit">1</span
+            ><span class="timeline__digit">9</span
+            ><span class="timeline__digit">1</span
+            ><span class="timeline__digit">9</span></span
+          >
+        </aside>
       </div>
 
       <!-- 2. VENTANAS NARRATIVAS (Steps): La crónica histórica -->
@@ -146,8 +147,19 @@
             espalda».
           </p>
           <figure class="press-photo">
-            <img src="/images/versailles-1919.jpg" alt="Delegados reunidos en el Salón de los Espejos durante la firma del Tratado de Versalles" loading="lazy" />
-            <figcaption>Versalles, 28 de junio de 1919: los delegados firman el tratado que puso fin a la Primera Guerra Mundial. <span>Imagen: William Orpen, Imperial War Museums / Wikimedia Commons · Dominio público.</span></figcaption>
+            <img
+              src="/images/versailles-1919.jpg"
+              alt="Delegados reunidos en el Salón de los Espejos durante la firma del Tratado de Versalles"
+              loading="lazy"
+            />
+            <figcaption>
+              Versalles, 28 de junio de 1919: los delegados firman el tratado
+              que puso fin a la Primera Guerra Mundial.
+              <span
+                >Imagen: William Orpen, Imperial War Museums / Wikimedia Commons
+                · Dominio público.</span
+              >
+            </figcaption>
           </figure>
           <cite class="step__source"
             >Fuentes: USHMM (s. f.-a); The Avalon Project (1919)</cite
@@ -168,8 +180,25 @@
             industriales.
           </p>
           <figure class="press-photo">
-            <img src="/images/marcha-roma-1922.jpg" alt="Primer camión de fascistas entrando en Roma durante la Marcha sobre Roma" loading="lazy" />
-            <figcaption>Los primeros fascistas llegan a Roma durante la marcha de octubre de 1922. <span>Imagen: <a href="https://commons.wikimedia.org/wiki/File:March_on_Rome_1922_-_Primi_arrivi.jpg" target="_blank" rel="noreferrer">L’Illustrazione Italiana, 1922</a> · Dominio público.</span></figcaption>
+            <img
+              src="/images/marcha-roma-1922.jpg"
+              alt="Primer camión de fascistas entrando en Roma durante la Marcha sobre Roma"
+              loading="lazy"
+            />
+            <figcaption>
+              Los primeros fascistas llegan a Roma durante la marcha de octubre
+              de 1922.
+              <span
+                >Imagen:
+                <a
+                  href="https://commons.wikimedia.org/wiki/File:March_on_Rome_1922_-_Primi_arrivi.jpg"
+                  target="_blank"
+                  rel="noreferrer"
+                  >L’Illustrazione Italiana, 1922</a
+                >
+                · Dominio público.</span
+              >
+            </figcaption>
           </figure>
           <cite class="step__source">Fuente: Williamson (2023)</cite>
         </div>
@@ -186,10 +215,26 @@
             restauración económica, empleo y orden, mientras intensificaba una
             agresiva propaganda antisemita como chivo expiatorio.
           </p>
-<figure class="press-photo">
-  <img src="/images/crisis-berlin-1930.jpg" alt="Ahorradores hacen fila frente a una caja de ahorros de Berlín durante la crisis bancaria de 1931" loading="lazy" />
-  <figcaption>Ahorradores se agolpan frente a la caja de ahorros municipal de Berlín tras la quiebra de Danatbank, el 13 de julio de 1931. <span>Imagen: Georg Pahl / Bundesarchiv, Bild 102-12023 · <a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank" rel="noreferrer">CC BY-SA 3.0 DE</a>.</span></figcaption>
-</figure>
+          <figure class="press-photo">
+            <img
+              src="/images/crisis-berlin-1930.jpg"
+              alt="Ahorradores hacen fila frente a una caja de ahorros de Berlín durante la crisis bancaria de 1931"
+              loading="lazy"
+            />
+            <figcaption>
+              Ahorradores se agolpan frente a la caja de ahorros municipal de
+              Berlín tras la quiebra de Danatbank, el 13 de julio de 1931.
+              <span
+                >Imagen: Georg Pahl / Bundesarchiv, Bild 102-12023 ·
+                <a
+                  href="https://creativecommons.org/licenses/by-sa/3.0/de/"
+                  target="_blank"
+                  rel="noreferrer"
+                  >CC BY-SA 3.0 DE</a
+                >.</span
+              >
+            </figcaption>
+          </figure>
           <cite class="step__source">Fuentes: USHMM (s. f.-b; s. f.-c)</cite>
         </div>
 
@@ -210,8 +255,31 @@
             podrían controlarlo.
           </p>
           <figure class="press-photo">
-            <img src="/images/nombramiento-1933.jpg" alt="El automóvil de Hitler sale de la Cancillería tras su nombramiento, el 30 de enero de 1933" loading="lazy" />
-            <figcaption>El automóvil de Hitler abandona la Cancillería tras su nombramiento como canciller, 30 de enero de 1933. <span>Imagen: <a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_102-15347,_Berlin,_Ernennung_Adolf_Hitlers_zum_Reichskanzler.jpg" target="_blank" rel="noreferrer">Bundesarchiv, Bild 102-15347</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank" rel="noreferrer">CC BY-SA 3.0 DE</a>.</span></figcaption>
+            <img
+              src="/images/nombramiento-1933.jpg"
+              alt="El automóvil de Hitler sale de la Cancillería tras su nombramiento, el 30 de enero de 1933"
+              loading="lazy"
+            />
+            <figcaption>
+              El automóvil de Hitler abandona la Cancillería tras su
+              nombramiento como canciller, 30 de enero de 1933.
+              <span
+                >Imagen:
+                <a
+                  href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_102-15347,_Berlin,_Ernennung_Adolf_Hitlers_zum_Reichskanzler.jpg"
+                  target="_blank"
+                  rel="noreferrer"
+                  >Bundesarchiv, Bild 102-15347</a
+                >
+                ·
+                <a
+                  href="https://creativecommons.org/licenses/by-sa/3.0/de/"
+                  target="_blank"
+                  rel="noreferrer"
+                  >CC BY-SA 3.0 DE</a
+                >.</span
+              >
+            </figcaption>
           </figure>
           <cite class="step__source">Fuente: USHMM (s. f.-c)</cite>
         </div>
@@ -230,8 +298,31 @@
             estallido inevitable de la conflagración mundial.
           </p>
           <figure class="press-photo">
-            <img src="/images/invasion-polonia-1939.jpg" alt="Soldados alemanes cruzan la frontera polaca el 1 de septiembre de 1939" loading="lazy" />
-            <figcaption>Soldados alemanes cruzan la frontera cerca de Danzig el 1 de septiembre de 1939. <span>Fotografía: Hans Sönnke, <a href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-E10457,_Polen,_Schlagbaum,_deutsche_Soldaten.jpg" target="_blank" rel="noreferrer">Bundesarchiv, Bild 183-E10457</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank" rel="noreferrer">CC BY-SA 3.0 DE</a>.</span></figcaption>
+            <img
+              src="/images/invasion-polonia-1939.jpg"
+              alt="Soldados alemanes cruzan la frontera polaca el 1 de septiembre de 1939"
+              loading="lazy"
+            />
+            <figcaption>
+              Soldados alemanes cruzan la frontera cerca de Danzig el 1 de
+              septiembre de 1939.
+              <span
+                >Fotografía: Hans Sönnke,
+                <a
+                  href="https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-E10457,_Polen,_Schlagbaum,_deutsche_Soldaten.jpg"
+                  target="_blank"
+                  rel="noreferrer"
+                  >Bundesarchiv, Bild 183-E10457</a
+                >
+                ·
+                <a
+                  href="https://creativecommons.org/licenses/by-sa/3.0/de/"
+                  target="_blank"
+                  rel="noreferrer"
+                  >CC BY-SA 3.0 DE</a
+                >.</span
+              >
+            </figcaption>
           </figure>
           <cite class="step__source"
             >Conexión con la Pregunta Central de Tesis</cite
