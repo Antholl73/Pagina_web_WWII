@@ -1,43 +1,48 @@
-/* --- RESET Y VARIABLES: ESTILO PRENSA HISTÓRICA DE ENTREGUERRAS --- */
+/* ==========================================================================
+   ÍNDICE
+   1. Variables
+   2. Base
+   3. Efectos de impresión (textura de papel y tinta)
+   4. Hero
+   5. Scrollytelling
+   6. Fotografías de prensa
+   7. Video scrubbing
+   ========================================================================== */
+
+/* ==========================================================================
+   1. VARIABLES
+   ========================================================================== */
+
+:root {
+  /* Paleta de periódico de los años 30 */
+  --paper-bg: #ece2cd;
+  --paper-card: #f5eedb;
+  --paper-photo: #e2d6bc;
+  --ink-primary: #191715;
+  --ink-secondary: #423d36;
+  --ink-border: #2b2621;
+  --propaganda-red: #9c251a;
+
+  --font-headline: "Oswald", Impact, sans-serif;
+  --font-editorial: "Newsreader", Georgia, serif;
+
+  /* Texturas de papel generadas con ruido SVG (feTurbulence).
+     El último número de la 4.ª fila de cada feColorMatrix controla la
+     intensidad: cuanto más negativo, más suave. */
+  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.22  0 0 0 0 0.17  0 0 0 0 0.1  1.5 0 0 0 -0.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --tex-fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.18 0.28' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.27  0 0 0 0 0.15  0 0 1.5 0 -1.0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --tex-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='1400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.003' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.36  0 0 0 0 0.16  0 0.7 0 0 -0.27'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  --paper-texture: var(--tex-grain), var(--tex-fibers), var(--tex-mottle);
+}
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-:root {
-  /* Paleta inspirada en periódicos de los años 30 ("Notizie da Roma" / Spazio Vitale) */
-  --paper-bg: #ece2cd; /* Fondo de papel periódico envejecido */
-  --paper-dark: #d8cbb0; /* Manchas y sombras de pliegues */
-  --ink-primary: #191715; /* Tinta negra carbón de imprenta */
-  --ink-secondary: #423d36; /* Tinta secundaria de columnas */
-  --propaganda-red: #9c251a; /* Rojo carmesí del recuadro de Mussolini */
-  --paper-card: #f5eedb; /* Tono de recorte de papel para las tarjetas */
-  --ink-border: #2b2621; /* Filetes negros de imprenta */
-
-  /* Compatibilidad y alias */
-  --accent-color: var(--propaganda-red);
-  --font-headline: "Oswald", Impact, sans-serif;
-  --font-editorial: "Newsreader", Georgia, serif;
-  --font-serif: var(--font-editorial);
-  --text-primary: var(--ink-primary);
-  --text-secondary: var(--ink-secondary);
-}
-
-/* --- TEXTURA DE PAPEL PRENSA ---
-   Tres capas SVG generadas con ruido (feTurbulence), sin imágenes externas.
-   Clave: el canal alfa sale del ruido, así sólo quedan motas sueltas y no
-   un velo uniforme. Se aplica como fondo (se desplaza con el contenido,
-   como una hoja real) en lugar de una capa fija encima de la pantalla. */
-:root {
-  /* 1. Grano fino de celulosa: motas oscuras dispersas */
-  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.22  0 0 0 0 0.17  0 0 0 0 0.1  1.5 0 0 0 -0.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  /* 2. Grumos de pulpa: fibras cortas, ligeramente alargadas */
-  --tex-fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.18 0.28' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.27  0 0 0 0 0.15  0 0 1.5 0 -1.0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-  /* 3. Manchas de envejecimiento: tono irregular, amarillento */
-  --tex-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='1400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.003' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.36  0 0 0 0 0.16  0 0.7 0 0 -0.27'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
-
-  --paper-texture: var(--tex-grain), var(--tex-fibers), var(--tex-mottle);
 }
 
 body {
@@ -47,20 +52,36 @@ body {
   font-family: var(--font-editorial);
   line-height: 1.6;
   overflow-x: hidden;
-  position: relative;
 }
 
-/* --- SECCIÓN HERO --- */
+/* ==========================================================================
+   3. EFECTOS DE IMPRESIÓN
+   ========================================================================== */
+
+/* Tinta de imprenta: el filtro #ink-rough está definido al inicio de index.html */
+.hero__tag,
+.hero__title,
+.hero__question-label,
+.hero__question-text,
+#graphic-desc,
+.step__badge,
+.step__title,
+.caption__title {
+  filter: url(#ink-rough);
+}
+
+/* ==========================================================================
+   4. HERO
+   ========================================================================== */
+
 .hero {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
   padding: 3rem 1.5rem;
-  /* Borde de imprenta superior e inferior */
+  text-align: center;
   border-bottom: 4px double var(--ink-border);
-  position: relative;
 }
 
 .hero__content {
@@ -72,73 +93,71 @@ body {
 
 .hero__tag {
   display: inline-block;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.3rem;
   font-family: var(--font-headline);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.25rem;
-  color: var(--ink-secondary);
   text-transform: uppercase;
+  color: var(--ink-secondary);
   border-bottom: 2px solid var(--ink-border);
-  padding-bottom: 0.3rem;
-  margin-bottom: 1.5rem;
 }
 
 .hero__title {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 1.2rem 0;
   font-family: var(--font-headline);
   font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 900;
-  text-transform: uppercase;
   line-height: 0.95;
   letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--ink-primary);
-  margin-bottom: 1.5rem;
-  /* Filete doble encima y debajo del título principal */
+  text-shadow: 0.4px 0.4px 0.5px rgba(24, 22, 20, 0.45);
   border-top: 3px solid var(--ink-border);
   border-bottom: 3px double var(--ink-border);
-  padding: 1.2rem 0;
-  width: 100%;
-  text-shadow: 0.4px 0.4px 0.5px rgba(24, 22, 20, 0.45);
 }
 
+/* Subtítulo dentro del <h1>: anula las mayúsculas y el espaciado del título */
 .hero__topic {
   display: block;
+  margin-top: 0.8rem;
   font-family: var(--font-editorial);
   font-size: clamp(1.2rem, 2.5vw, 1.7rem);
   font-weight: 400;
   font-style: italic;
+  letter-spacing: 0;
   text-transform: none;
   color: var(--propaganda-red);
-  margin-top: 0.8rem;
-  letter-spacing: 0;
 }
 
-/* CAJA ROJA DE LA PREGUNTA CENTRAL (Inspirada en el bloque de Mussolini de tu foto) */
+/* Caja roja de la pregunta central */
 .hero__question-box {
+  max-width: 850px;
+  margin: 1.5rem auto 2.5rem;
+  padding: 2rem 2.5rem;
+  color: #fff9ee;
   background:
     var(--tex-grain), var(--tex-fibers),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.18)),
     var(--propaganda-red);
-  color: #fff9ee;
   border: 2px solid var(--ink-border);
-  box-shadow: 5px 5px 0px var(--ink-border); /* Sombra dura de imprenta */
-  padding: 2rem 2.5rem;
-  margin: 1.5rem auto 2.5rem;
-  max-width: 850px;
-  text-align: center;
-  position: relative;
+  box-shadow: 5px 5px 0 var(--ink-border);
 }
 
 .hero__question-label {
   display: inline-block;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.2rem;
   font-family: var(--font-headline);
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.2rem;
   text-transform: uppercase;
   color: #ffd8d3;
-  margin-bottom: 0.8rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-  padding-bottom: 0.2rem;
 }
 
 .hero__question-text {
@@ -146,23 +165,22 @@ body {
   font-size: clamp(1.2rem, 2.2vw, 1.6rem);
   font-weight: 700;
   line-height: 1.35;
-  text-transform: uppercase;
   letter-spacing: 0.03em;
+  text-transform: uppercase;
   color: #ffffff;
 }
 
-/* Indicador de scroll */
 .hero__scroll-indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.4rem;
   font-family: var(--font-headline);
-  color: var(--ink-secondary);
   font-size: 0.9rem;
+  font-weight: 700;
   letter-spacing: 0.15rem;
   text-transform: uppercase;
-  font-weight: 700;
+  color: var(--ink-secondary);
 }
 
 .arrow-down {
@@ -187,71 +205,71 @@ body {
   }
 }
 
-/* --- ESTRUCTURA SCROLLYTELLING ESTILO PRENSA --- */
+/* ==========================================================================
+   5. SCROLLYTELLING
+   El fondo (.scrolly__graphic) queda fijo con sticky mientras las tarjetas
+   (.step) pasan por encima. main.js marca la tarjeta del centro con .is-active
+   y actualiza el año y la descripción.
+   ========================================================================== */
 
 .scrolly {
   position: relative;
   width: 100%;
 }
 
-/* 1. Fondo pegajoso (Sticky): papel envejecido con marca de agua gigante */
 .scrolly__graphic {
   position: sticky;
   top: 0;
+  z-index: 1;
   width: 100%;
   height: 100vh;
-  z-index: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+  padding-right: clamp(2rem, 8vw, 8rem);
   background-color: var(--paper-bg);
   background-image: var(--paper-texture);
   border-bottom: 3px double var(--ink-border);
 }
 
 .graphic__placeholder {
-  text-align: center;
+  max-width: 480px;
   padding: 2rem;
+  text-align: center;
 }
 
 .graphic__year {
-  font-family: var(--font-headline);
-  font-size: clamp(5rem, 20vw, 14rem);
-  font-weight: 900;
-  color: rgba(
-    43,
-    38,
-    33,
-    0.08
-  ); /* Año gigante impreso como grabado sutil de fondo */
   display: block;
-  user-select: none;
+  font-family: var(--font-headline);
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  font-weight: 900;
   line-height: 0.85;
+  color: rgba(43, 38, 33, 0.15);
+  user-select: none;
   transition: all 0.5s ease;
 }
 
 #graphic-desc {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.4rem 1.2rem;
   font-family: var(--font-headline);
-  font-size: 1.4rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--propaganda-red);
   letter-spacing: 0.15rem;
   text-transform: uppercase;
-  margin-top: 1rem;
+  color: var(--propaganda-red);
   border-top: 2px solid var(--ink-border);
   border-bottom: 2px solid var(--ink-border);
-  display: inline-block;
-  padding: 0.4rem 1.2rem;
 }
 
-/* 2. Pasos de texto: Como pliegos y recortes de periódico */
+/* z-index 2: las tarjetas pasan por encima del fondo fijo */
 .scrolly__steps {
   position: relative;
   z-index: 2;
-  max-width: 680px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: 0 auto 50vh 10px;
   padding: 0 1.5rem;
-  margin-bottom: 50vh;
 }
 
 .step {
@@ -259,7 +277,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 12vh;
+  margin-bottom: 3vh;
   padding: 2.5rem;
   background-color: var(--paper-card);
   background-image:
@@ -270,65 +288,60 @@ body {
       rgba(0, 0, 0, 0.04) 100%
     );
   border: 2px solid var(--ink-border);
-  outline: 1px dashed rgba(43, 38, 33, 0.35); /* Troquelado interior de corte de pliego */
+  outline: 1px dashed rgba(43, 38, 33, 0.35); /* Línea de recorte interior */
   outline-offset: -7px;
-  box-shadow: 6px 6px 0px rgba(43, 38, 33, 0.85); /* Sombra sólida de recorte físico */
+  box-shadow: 6px 6px 0 rgba(43, 38, 33, 0.85);
+  opacity: 0.4;
+  transform: translateY(20px);
   transition:
     opacity 0.4s ease,
     transform 0.4s ease;
-  opacity: 0.4;
-  transform: translateY(20px);
 }
 
 .step.is-active {
   opacity: 1;
   transform: translateY(0);
   border-color: var(--propaganda-red);
-  box-shadow: 8px 8px 0px var(--propaganda-red);
+  box-shadow: 8px 8px 0 var(--propaganda-red);
 }
 
 .step__badge {
   display: inline-block;
   align-self: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 0.2rem;
   font-family: var(--font-headline);
   font-size: 0.85rem;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.2rem;
+  text-transform: uppercase;
   color: var(--propaganda-red);
   border-bottom: 1px solid var(--propaganda-red);
-  padding-bottom: 0.2rem;
-  margin-bottom: 1rem;
 }
 
 .step__title {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
   font-family: var(--font-headline);
   font-size: 2.2rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  margin-bottom: 1rem;
-  color: var(--ink-primary);
   line-height: 1.1;
-  border-bottom: 1px solid var(--ink-border);
-  padding-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-primary);
   text-shadow: 0.3px 0.3px 0.5px rgba(24, 22, 20, 0.4);
+  border-bottom: 1px solid var(--ink-border);
 }
 
 .step__text {
   font-size: 1.15rem;
-  color: var(--ink-secondary);
   line-height: 1.75;
-  text-align: justify; /* Justificado típico de las columnas de prensa */
+  text-align: justify;
+  color: var(--ink-secondary);
 }
 
-.step__text strong {
-  color: var(--ink-primary);
-  font-weight: 700;
-}
-
+.step__text strong,
 .step__text em {
-  font-style: italic;
   color: var(--ink-primary);
 }
 
@@ -336,17 +349,20 @@ body {
   display: block;
   margin-top: 1.5rem;
   padding-top: 0.8rem;
-  border-top: 1px dashed var(--ink-border);
   font-size: 0.82rem;
-  color: var(--ink-secondary);
   font-style: italic;
+  color: var(--ink-secondary);
+  border-top: 1px dashed var(--ink-border);
 }
 
-/* Fotografías documentales enmarcadas como recortes de prensa */
+/* ==========================================================================
+   6. FOTOGRAFÍAS DE PRENSA
+   ========================================================================== */
+
 .press-photo {
   margin-top: 1.4rem;
   padding: 0.55rem;
-  background: #e2d6bc;
+  background: var(--paper-photo);
   border: 1px solid var(--ink-border);
   box-shadow: 2px 2px 0 rgba(43, 38, 33, 0.35);
 }
@@ -356,7 +372,7 @@ body {
   width: 100%;
   max-height: 360px;
   object-fit: cover;
-  filter: grayscale(100%) sepia(18%) contrast(1.05);
+  filter: grayscale(100%) sepia(18%) contrast(1.05); /* Aspecto de foto impresa */
   border: 1px solid rgba(43, 38, 33, 0.45);
 }
 
@@ -372,8 +388,8 @@ body {
   display: block;
   margin-top: 0.28rem;
   font-size: 0.72rem;
-  color: var(--ink-secondary);
   font-style: italic;
+  color: var(--ink-secondary);
 }
 
 .press-photo a {
@@ -382,43 +398,45 @@ body {
   text-underline-offset: 2px;
 }
 
-/* --- SECCIÓN VIDEO SCRUBBING --- */
+/* ==========================================================================
+   7. VIDEO SCRUBBING
+   La altura de .video-scrub es el recorrido de scroll que usa main.js para
+   avanzar el video: más alto = el video avanza más despacio.
+   Capas: video (1) → viñeta (2) → tarjeta de texto (3).
+   ========================================================================== */
 
-/* 1. La pista de scroll: define qué tan largo es el recorrido para reproducir el video */
 .video-scrub {
   position: relative;
   height: 1000vh;
   background-color: #000;
 }
 
-/* 2. El visor fijado a la pantalla */
 .video-scrub__sticky {
   position: sticky;
   top: 0;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-/* 3. El elemento de video a pantalla completa */
 .video-scrub__media {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Asegura que llene la pantalla sin deformarse */
   position: absolute;
   top: 0;
   left: 0;
   z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* 4. Viñeta oscura sobre el video para que el texto sea legible */
 .video-scrub__overlay {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
   width: 100%;
   height: 100%;
   background: radial-gradient(
@@ -426,82 +444,66 @@ body {
     rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0.85) 100%
   );
-  z-index: 2;
-  pointer-events: none; /* Permite hacer clic o scroll a través de él */
+  pointer-events: none;
 }
 
-/* 5. Tarjeta explicativa sobre el video */
 .video-scrub__caption {
   position: relative;
   z-index: 3;
   max-width: 650px;
+  margin: 0 1.5rem;
   padding: 2.5rem;
+  text-align: left;
   background: rgba(18, 18, 18, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-left: 4px solid var(--accent-color);
+  border-left: 4px solid var(--propaganda-red);
   border-radius: 8px;
-  text-align: left;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-  margin: 0 1.5rem;
 }
 
 .caption__tag {
   display: block;
+  margin-bottom: 0.75rem;
   font-family: var(--font-headline);
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.18rem;
   text-transform: uppercase;
   color: var(--propaganda-red);
-  margin-bottom: 0.75rem;
 }
 
 .caption__title {
+  margin-bottom: 1rem;
   font-family: var(--font-headline);
   font-size: 2rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  margin-bottom: 1rem;
-  color: #ffffff;
   line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
 }
 
 .caption__desc {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
   margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-secondary);
 }
 
 .caption__progress {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 0.8rem;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--ink-primary);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 0.8rem;
 }
 
 #video-progress-text {
-  color: var(--accent-color);
   font-family: monospace;
   font-size: 1rem;
-}
-
-/* --- EFECTO DE TINTA DE IMPRENTA ---
-   Usa el filtro SVG #ink-rough definido al inicio de index.html:
-   bordes irregulares + pequeños huecos donde la tinta no cargó. */
-.hero__tag,
-.hero__title,
-.hero__question-label,
-.hero__question-text,
-#graphic-desc,
-.step__badge,
-.step__title,
-.caption__title {
-  filter: url(#ink-rough);
+  color: var(--propaganda-red);
 }
