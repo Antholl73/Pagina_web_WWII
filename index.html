@@ -83,7 +83,7 @@
     </svg>
 
     <!-- SECCIÓN HERO: Portada y Pregunta de Investigación -->
-    <header class="hero">
+    <header class="hero" id="inicio">
       <div class="hero__content">
         <!-- 1. Etiqueta temporal -->
         <span class="hero__tag">1939 — 1945 | Segunda Guerra Mundial</span>
@@ -107,6 +107,10 @@
             expansionismo nazi y fascista?»
           </blockquote>
         </div>
+
+        <button type="button" class="hero__meta-link" id="open-credits-btn">
+          Equipo y fuentes
+        </button>
 
         <!-- 4. Llamado al scroll -->
         <div class="hero__scroll-indicator">
@@ -374,6 +378,78 @@
         </div>
       </div>
     </section>
+
+    <!-- FICHA SUPERPUESTA DE CRÉDITOS Y FUENTES -->
+    <dialog
+      class="colophon-modal"
+      id="modal-creditos"
+      aria-labelledby="modal-creditos-title"
+    >
+      <div class="colophon__container">
+        <div class="colophon__header">
+          <div>
+            <span class="colophon__kicker"
+              >Edición Especial · Créditos y Archivo</span
+            >
+            <h2 class="colophon__title" id="modal-creditos-title">
+              Equipo de Investigación y Fuentes
+            </h2>
+          </div>
+          <button
+            type="button"
+            class="colophon__close"
+            id="close-credits-btn"
+            aria-label="Cerrar ficha"
+          >
+            ✕ Cerrar
+          </button>
+        </div>
+
+        <div class="colophon__grid">
+          <!-- Columna 1: Los 8 integrantes -->
+          <section class="colophon__block">
+            <h3 class="colophon__subtitle">Integrantes (8)</h3>
+            <ol class="colophon__team">
+              <li>Nombre del Integrante 1</li>
+              <li>Nombre del Integrante 2</li>
+              <li>Nombre del Integrante 3</li>
+              <li>Nombre del Integrante 4</li>
+              <li>Nombre del Integrante 5</li>
+              <li>Nombre del Integrante 6</li>
+              <li>Nombre del Integrante 7</li>
+              <li>Nombre del Integrante 8</li>
+            </ol>
+          </section>
+
+          <!-- Columna 2: Fuentes bibliográficas -->
+          <section class="colophon__block">
+            <h3 class="colophon__subtitle">Fuentes Históricas y Académicas</h3>
+            <ul class="colophon__sources">
+              <li>
+                The Avalon Project. (1919). <em>The Versailles Treaty</em>. Yale
+                Law School.
+              </li>
+              <li>
+                United States Holocaust Memorial Museum [USHMM]. (s. f.-a).
+                <em>El Tratado de Versalles</em>. Enciclopedia del Holocausto.
+              </li>
+              <li>
+                United States Holocaust Memorial Museum [USHMM]. (s. f.-b).
+                <em>La Gran Depresión</em>. Enciclopedia del Holocausto.
+              </li>
+              <li>
+                United States Holocaust Memorial Museum [USHMM]. (s. f.-c).
+                <em>El ascenso de Hitler al poder</em>. Enciclopedia del
+                Holocausto.
+              </li>
+              <li>
+                Williamson, D. (2023). <em>Mussolini and Fascist Italy</em>.
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </dialog>
 
     <!-- Script principal como módulo ES6 -->
     <script type="module" src="./src/main.js"></script>

@@ -50,7 +50,7 @@ function initScrollytelling() {
         .setup({
           step: ".step",
           offset: 0.50,
-          debug: true,
+          debug: false,
         })
         .onStepEnter(handleStepEnter);
 
@@ -156,6 +156,24 @@ function initVideoScrub() {
   observer.observe(videoSection);
 }
 
+function initCreditsModal() {
+  const openBtn = document.getElementById("open-credits-btn");
+  const closeBtn = document.getElementById("close-credits-btn");
+  const modal = document.getElementById("modal-creditos");
+
+    if (!openBtn || !modal) return;
+      openBtn.addEventListener("click", () => modal.showModal());
+      closeBtn?.addEventListener("click", () => modal.close());
+
+      // Cierra la ficha al hacer clic fuera de ella (en el fondo oscuro)
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          modal.close();
+        }
+      });
+    }
+
+initCreditsModal();
 initIntro();
 initScrollytelling();
 initVideoScrub();

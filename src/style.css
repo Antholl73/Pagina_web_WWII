@@ -45,6 +45,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--paper-bg);
   background-image: var(--paper-texture);
@@ -246,11 +250,12 @@ body {
    ========================================================================== */
 
 .hero {
+  position: relative;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3rem 1.5rem;
+  padding: 3rem 1.5rem 4rem;
   text-align: center;
   border-bottom: 4px double var(--ink-border);
 }
@@ -339,6 +344,22 @@ body {
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #ffffff;
+}
+
+.hero__meta-link {
+  position: absolute;
+  bottom: 1.2rem;
+  right: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-editorial);
+  font-size: 0.82rem;
+  color: #6b655d; /* Gris discreto legible sobre el papel */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.25s ease;
 }
 
 .hero__scroll-indicator {
@@ -483,7 +504,7 @@ body {
   position: relative;
   z-index: 2;
   width: auto;
-  max-width: 760px;
+  max-width: 1000px;
   /* Arriba -75vh | Derecha (espacio reservado) | Abajo 45vh | Izquierda */
   margin: -75vh clamp(305px, 33vw, 430px) 45vh clamp(1rem, 4vw, 2rem);
   padding: 0;
@@ -823,6 +844,147 @@ body {
   font-family: monospace;
   font-size: 1rem;
   color: var(--propaganda-red);
+}
+
+/* ==========================================================================
+       8. FICHA SUPERPUESTA: CRÉDITOS (INTEGRANTES) Y FUENTES
+       ========================================================================== */
+
+.colophon-modal {
+  margin: auto; /* Necesario por el reset * { margin: 0 } */
+  padding: 0;
+  width: min(92vw, 960px);
+  max-height: 88vh;
+  overflow-y: auto;
+  color: var(--ink-primary);
+  background-color: var(--paper-bg);
+  background-image: var(--paper-texture);
+  border: 3px solid var(--ink-border);
+  outline: 1px dashed rgba(43, 38, 33, 0.4);
+  outline-offset: -8px;
+  box-shadow: 10px 10px 0 rgba(25, 23, 21, 0.9);
+}
+
+.colophon-modal[open] {
+  animation: modal-fade-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.colophon-modal::backdrop {
+  background: rgba(15, 13, 11, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.colophon__container {
+  padding: clamp(1.5rem, 3.5vw, 2.75rem);
+}
+
+.colophon__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--ink-border);
+}
+
+.colophon__kicker {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  color: var(--propaganda-red);
+}
+
+.colophon__title {
+  font-family: var(--font-headline);
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+  font-weight: 900;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--ink-primary);
+}
+
+.colophon__close {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-headline);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  color: var(--ink-primary);
+  background-color: var(--paper-card);
+  border: 2px solid var(--ink-border);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.colophon__close:hover {
+  color: #ffffff;
+  background-color: var(--propaganda-red);
+  border-color: var(--propaganda-red);
+}
+
+.colophon__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .colophon__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.colophon__block {
+  padding: 1.5rem;
+  background-color: var(--paper-card);
+  background-image: var(--paper-texture);
+  border: 2px solid var(--ink-border);
+  box-shadow: 4px 4px 0 rgba(43, 38, 33, 0.8);
+}
+
+.colophon__subtitle {
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  font-family: var(--font-headline);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: var(--propaganda-red);
+  border-bottom: 1px solid var(--ink-border);
+}
+
+.colophon__team,
+.colophon__sources {
+  padding-left: 1.25rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--ink-secondary);
+}
+
+.colophon__sources li {
+  margin-bottom: 0.6rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
