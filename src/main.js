@@ -46,16 +46,28 @@ function handleStepEnter({ element }) {
 }
 
 function initScrollytelling() {
-  scroller
-    .setup({
-      step: ".step",
-      offset: 0.52,
-      debug: false,
-    })
-    .onStepEnter(handleStepEnter);
+      scroller
+        .setup({
+          step: ".step",
+          offset: 0.50,
+          debug: true,
+        })
+        .onStepEnter(handleStepEnter);
 
-  window.addEventListener("resize", scroller.resize);
-}
+      window.addEventListener("resize", scroller.resize);
+
+      // Recalcula automáticamente cuando cambian las dimensiones de las tarjetas
+      // (al cargar imágenes lazy, fuentes o estrechar la ventana)
+      const stepsContainer = document.querySelector(".scrolly__steps");
+      if (stepsContainer && "ResizeObserver" in window) {
+        let resizeRaf = null;
+        const observer = new ResizeObserver(() => {
+          cancelAnimationFrame(resizeRaf);
+          resizeRaf = requestAnimationFrame(() => scroller.resize());
+        });
+        observer.observe(stepsContainer);
+      }
+    }
 
 const videoSection = document.getElementById("video-scrub-section");
 const scrubVideo = document.getElementById("scrub-video");
