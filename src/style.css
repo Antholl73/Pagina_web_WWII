@@ -51,7 +51,7 @@ body {
   color: var(--ink-primary);
   font-family: var(--font-editorial);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .intro {
@@ -233,6 +233,7 @@ body {
 .hero__title,
 .hero__question-label,
 .hero__question-text,
+.scrolly__subtitle,
 .timeline__year,
 .step__badge,
 .step__title,
@@ -393,6 +394,51 @@ body {
   border-bottom: 3px double var(--ink-border);
 }
 
+/* Subtítulo sticky de la sección (visible de 1919 a 1939) */
+.scrolly__subtitle-box {
+  position: absolute;
+  top: 12vh;
+  right: 5.5rem;
+  max-width: 320px;
+  text-align: right;
+  pointer-events: none;
+}
+
+.scrolly__kicker {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  color: var(--propaganda-red);
+}
+
+.scrolly__subtitle {
+  font-family: var(--font-headline);
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--ink-primary);
+  padding-bottom: 0.5rem;
+  border-bottom: 3px double var(--ink-border);
+}
+
+/* En pantallas medianas/pequeñas lo centramos arriba para que no choque con las tarjetas */
+@media (max-width: 1100px) {
+  .scrolly__subtitle-box {
+    top: 1.25rem;
+    right: 4.5rem;
+    max-width: calc(100% - 6rem);
+  }
+
+  .scrolly__subtitle {
+    font-size: 1.4rem;
+  }
+}
+
 .timeline {
   position: absolute;
   top: 12vh;
@@ -457,9 +503,17 @@ body {
 .scrolly__steps {
   position: relative;
   z-index: 2;
-  max-width: 800px;
-  margin: 0 auto 50vh 10px;
+  max-width: min(760px, 60vw);
+  margin: -75vh auto 50vh 10px;
   padding: 0 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .scrolly__steps {
+    max-width: 100%;
+    margin: -65vh auto 50vh 0;
+    padding: 4.5rem 4.2rem 0 1.25rem;
+  }
 }
 
 .step {
@@ -723,7 +777,7 @@ body {
   margin-bottom: 1.5rem;
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--ink-secondary);
+  color: #d8ceb8;
 }
 
 .caption__progress {
@@ -733,10 +787,9 @@ body {
   padding-top: 0.8rem;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--ink-primary);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f5eedb;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
-
 #video-progress-text {
   font-family: monospace;
   font-size: 1rem;
