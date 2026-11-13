@@ -379,6 +379,263 @@
       </div>
     </section>
 
+    <!-- SECCIÓN RED INTERACTIVA DE RELACIONES HISTÓRICAS -->
+    <section class="network" id="red-relaciones">
+      <div class="network__container">
+        <header class="network__header">
+          <div>
+            <span class="network__kicker">Sección II · Mapa Causal Sustentado</span>
+            <h2 class="network__title">Red de Relaciones Históricas</h2>
+            <p class="network__intro">
+              Selecciona cualquier ficha <strong>o haz clic sobre una línea de conexión</strong>
+              para ver cómo se articulan las <strong>causas</strong>, los
+              <strong>actores</strong>, los <strong>acontecimientos</strong> y sus
+              <strong>consecuencias</strong> desde 1918 hasta el nuevo orden de 1945,
+              con respaldo documental directo.
+            </p>
+          </div>
+          <div class="network__controls">
+            <div
+              class="network__filters"
+              id="network-filters"
+              role="group"
+              aria-label="Filtrar ejes históricos"
+            >
+              <button
+                type="button"
+                class="network__filter-btn is-active"
+                data-filter="all"
+              >
+                Todas las relaciones
+              </button>
+              <button
+                type="button"
+                class="network__filter-btn"
+                data-filter="ascenso"
+              >
+                Ascenso Fascista / Nazi
+              </button>
+              <button
+                type="button"
+                class="network__filter-btn"
+                data-filter="camino-1939"
+              >
+                Camino a 1939
+              </button>
+              <button
+                type="button"
+                class="network__filter-btn"
+                data-filter="guerra-orden"
+              >
+                Guerra Total y Consecuencias
+              </button>
+            </div>
+            <button type="button" class="network__reset" id="network-reset-btn">
+              Limpiar selección
+            </button>
+          </div>
+        </header>
+
+        <div class="network__legend" aria-hidden="true">
+          <span class="network__legend-item">
+            <span class="network__legend-swatch is-outgoing"></span>
+            Genera / impulsa (salida)
+          </span>
+          <span class="network__legend-item">
+            <span class="network__legend-swatch is-incoming"></span>
+            Explicado por / recibe (entrada)
+          </span>
+          <span class="network__legend-stat" id="network-stats">
+            20 nodos · 46 relaciones sustentadas
+          </span>
+        </div>
+
+        <!-- Tablero de 4 columnas + capa SVG para las líneas -->
+        <div class="network__board" id="network-board">
+          <svg class="network__svg" id="network-svg" aria-hidden="true"></svg>
+
+          <div class="network__columns">
+            <!-- Columna 1: Causas y Contexto -->
+            <div class="network__col">
+              <h3 class="network__col-title">1. Causas y Contexto</h3>
+              <button type="button" class="net-node" data-node="versalles">
+                <span class="net-node__tag">1919 · Alemania</span>
+                Versalles y Crisis de Weimar
+              </button>
+              <button
+                type="button"
+                class="net-node"
+                data-node="italia-posguerra"
+              >
+                <span class="net-node__tag">1918–1922 · Italia</span>
+                Posguerra y Temor al Socialismo
+              </button>
+              <button type="button" class="net-node" data-node="depresion-29">
+                <span class="net-node__tag">1929 · Crisis Global</span>
+                Gran Depresión de 1929
+              </button>
+              <button
+                type="button"
+                class="net-node"
+                data-node="precursores-apaciguamiento"
+              >
+                <span class="net-node__tag">1931–1938 · Escalada</span>
+                Precursores y Apaciguamiento
+              </button>
+              <button
+                type="button"
+                class="net-node"
+                data-node="tesis-no-inevitable"
+              >
+                <span class="net-node__tag">Tesis Historiográfica</span>
+                La Crisis ≠ Inevitabilidad
+              </button>
+            </div>
+
+            <!-- Columna 2: Actores y Bloques -->
+            <div class="network__col">
+              <h3 class="network__col-title">2. Actores y Bloques</h3>
+              <button type="button" class="net-node" data-node="elites">
+                <span class="net-node__tag">Poder Tradicional</span>
+                Élites, Monarquía e Hindenburg
+              </button>
+              <button type="button" class="net-node" data-node="fascismo">
+                <span class="net-node__tag">Italia · PNF (1919)</span>
+                Benito Mussolini y el Fascismo
+              </button>
+              <button type="button" class="net-node" data-node="nazismo">
+                <span class="net-node__tag">Alemania · NSDAP</span>
+                Adolf Hitler y el Partido Nazi
+              </button>
+              <button type="button" class="net-node" data-node="potencias-urss">
+                <span class="net-node__tag">Escenario Mundial</span>
+                Potencias Occidentales, URSS y Japón
+              </button>
+            </div>
+
+            <!-- Columna 3: Acontecimientos y Mecanismos -->
+            <div class="network__col">
+              <h3 class="network__col-title">3. Acontecimientos</h3>
+              <button type="button" class="net-node" data-node="marcha-roma">
+                <span class="net-node__tag">Octubre 1922</span>
+                Marcha sobre Roma
+              </button>
+              <button
+                type="button"
+                class="net-node"
+                data-node="violencia-propaganda"
+              >
+                <span class="net-node__tag">Control y Terror</span>
+                Violencia Paramilitar y Propaganda
+              </button>
+              <button
+                type="button"
+                class="net-node"
+                data-node="ley-habilitante"
+              >
+                <span class="net-node__tag">Enero–Marzo 1933</span>
+                Cancillería y Ley Habilitante
+              </button>
+              <button type="button" class="net-node" data-node="leyes-raciales">
+                <span class="net-node__tag">1935 y 1938</span>
+                Núremberg, Cristales Rotos e Italia
+              </button>
+              <button
+                type="button"
+                class="net-node"
+                data-node="estallido-blitzkrieg"
+              >
+                <span class="net-node__tag">1939–1940</span>
+                Pacto, Polonia y Blitzkrieg
+              </button>
+              <button type="button" class="net-node" data-node="viraje-global">
+                <span class="net-node__tag">1941–1945</span>
+                Barbarroja, Pearl Harbor e Inflexión
+              </button>
+            </div>
+
+            <!-- Columna 4: Consecuencias -->
+            <div class="network__col">
+              <h3 class="network__col-title">4. Consecuencias</h3>
+              <button type="button" class="net-node" data-node="dos-dictaduras">
+                <span class="net-node__tag">Régimen Político</span>
+                Totalitarismo Nazi vs. Monarquía Formal
+              </button>
+              <button
+                type="button"
+                class="net-node"
+                data-node="lebensraum-rassenkrieg"
+              >
+                <span class="net-node__tag">Frente Ideológico</span>
+                Lebensraum y Rassenkrieg
+              </button>
+              <button type="button" class="net-node" data-node="holocausto">
+                <span class="net-node__tag">1938–1945 · Shoah</span>
+                El Holocausto y Exterminio
+              </button>
+              <button type="button" class="net-node" data-node="guerra-total">
+                <span class="net-node__tag">Balance Humano</span>
+                Guerra Total y Devastación (45–55M)
+              </button>
+              <button type="button" class="net-node" data-node="nuevo-orden">
+                <span class="net-node__tag">Posguerra · 1945+</span>
+                Guerra Fría, Descolonización y Ciencia
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ficha explicativa del nodo o relación seleccionada -->
+        <aside class="network__detail" id="network-detail" aria-live="polite">
+          <div class="network__detail-top">
+            <div>
+              <span class="network__detail-category" id="detail-category">
+                Explorador Causal Sustentado
+              </span>
+              <h3 class="network__detail-title" id="detail-title">
+                Selecciona una ficha o una línea de conexión
+              </h3>
+            </div>
+            <span class="network__detail-source" id="detail-source">
+              Base documental: USHMM · Williamson · Gerwarth · Passmore · Acemoglu et al. · Beevor · García Moreno
+            </span>
+          </div>
+
+          <p class="network__detail-text" id="detail-text">
+            Haz clic en cualquier nodo para iluminar sus causas previas (en tinta oscura)
+            y los procesos que impulsa (en rojo). Luego selecciona cualquier relación para leer
+            su justificación histórica y fuente bibliográfica exacta.
+          </p>
+
+          <!-- Tarjeta de evidencia específica cuando se inspecciona una arista -->
+          <div class="network__edge-card" id="detail-edge-card" hidden>
+            <div class="network__edge-meta">
+              <span class="network__edge-badge" id="detail-edge-kind">Relación causal</span>
+              <span class="network__edge-route" id="detail-edge-route"></span>
+            </div>
+            <p class="network__edge-why" id="detail-edge-why"></p>
+            <div class="network__edge-footer">
+              <span class="network__edge-source" id="detail-edge-source"></span>
+              <button type="button" class="network__edge-jump" id="detail-edge-jump">
+                Ir al nodo conectado →
+              </button>
+            </div>
+          </div>
+
+          <div class="network__relations-grid" id="detail-relations" hidden>
+            <div class="network__relation-group" id="detail-group-in">
+              <h4 class="network__relation-heading">← Factores que lo explican</h4>
+              <div class="network__detail-links" id="detail-links-in"></div>
+            </div>
+            <div class="network__relation-group" id="detail-group-out">
+              <h4 class="network__relation-heading">→ Procesos e impactos que impulsa</h4>
+              <div class="network__detail-links" id="detail-links-out"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
     <!-- FICHA SUPERPUESTA DE CRÉDITOS Y FUENTES -->
     <dialog
       class="colophon-modal"
@@ -426,24 +683,61 @@
             <h3 class="colophon__subtitle">Fuentes Históricas y Académicas</h3>
             <ul class="colophon__sources">
               <li>
-                The Avalon Project. (1919). <em>The Versailles Treaty</em>. Yale
-                Law School.
+                Acemoglu, D., De Feo, G., De Luca, G., &amp; Russo, G. (2022).
+                War, socialism, and the rise of fascism: An empirical exploration.
+                <em>The Quarterly Journal of Economics</em>, 137(2), 1233–1296.
+              </li>
+              <li>
+                Beevor, A. (2012). <em>La Segunda Guerra Mundial: Una historia gráfica</em>.
+              </li>
+              <li>
+                García Moreno, F. (s. f.). <em>La Segunda Guerra Mundial y sus consecuencias</em>
+                [Dossier académico base].
+              </li>
+              <li>
+                Gerwarth, R. (2020). March on Rome: Violence and the rise of Italian
+                fascism, by Giulia Albanese. <em>The English Historical Review</em>,
+                135(576), 1364–1366.
+              </li>
+              <li>
+                Passmore, K. (2014). <em>Fascism: A very short introduction</em> (2nd ed.).
+                Oxford University Press.
+              </li>
+              <li>
+                The Avalon Project. (1919). <em>The Versailles Treaty</em>. Yale Law School.
               </li>
               <li>
                 United States Holocaust Memorial Museum [USHMM]. (s. f.-a).
-                <em>El Tratado de Versalles</em>. Enciclopedia del Holocausto.
+                <em>The Weimar Republic</em>. Holocaust Encyclopedia.
               </li>
               <li>
                 United States Holocaust Memorial Museum [USHMM]. (s. f.-b).
-                <em>La Gran Depresión</em>. Enciclopedia del Holocausto.
+                <em>Adolf Hitler and the Nazi rise to power, 1918–1933</em>. Holocaust Encyclopedia.
               </li>
               <li>
                 United States Holocaust Memorial Museum [USHMM]. (s. f.-c).
-                <em>El ascenso de Hitler al poder</em>. Enciclopedia del
-                Holocausto.
+                <em>Hitler comes to power</em>. Holocaust Encyclopedia.
               </li>
               <li>
-                Williamson, D. (2023). <em>Mussolini and Fascist Italy</em>.
+                United States Holocaust Memorial Museum [USHMM]. (s. f.-d).
+                <em>Italy</em>. Holocaust Encyclopedia.
+              </li>
+              <li>
+                United States Holocaust Memorial Museum [USHMM]. (s. f.-e).
+                <em>The Enabling Act of 1933</em>. Holocaust Encyclopedia.
+              </li>
+              <li>
+                United States Holocaust Memorial Museum [USHMM]. (s. f.-f).
+                <em>Nuremberg Laws</em>. Holocaust Encyclopedia.
+              </li>
+              <li>
+                United States Holocaust Memorial Museum [USHMM]. (s. f.-g).
+                <em>The Holocaust: Key questions</em>. Holocaust Encyclopedia.
+              </li>
+              <li>
+                Williamson, P. J. (2023). The rise of Mussolini and the Fascists:
+                Establishing a dictatorship. En <em>Duce: The contradictions of power</em>.
+                Oxford University Press.
               </li>
             </ul>
           </section>
