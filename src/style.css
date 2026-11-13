@@ -398,10 +398,11 @@ body {
 .scrolly__subtitle-box {
   position: absolute;
   top: 12vh;
-  right: 5.5rem;
-  max-width: 320px;
+  right: clamp(4.2rem, 5.5vw, 5.5rem);
+  max-width: clamp(200px, 24vw, 320px);
   text-align: right;
   pointer-events: none;
+  margin-right: 2vh;
 }
 
 .scrolly__kicker {
@@ -417,7 +418,7 @@ body {
 
 .scrolly__subtitle {
   font-family: var(--font-headline);
-  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-size: clamp(1.5rem, 3vw, 2.8rem);
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
@@ -426,16 +427,16 @@ body {
   border-bottom: 3px double var(--ink-border);
 }
 
-/* En pantallas medianas/pequeñas lo centramos arriba para que no choque con las tarjetas */
-@media (max-width: 1100px) {
+/* Solo en pantallas estrechas (< 900px) */
+@media (max-width: 900px) {
   .scrolly__subtitle-box {
     top: 1.25rem;
-    right: 4.5rem;
-    max-width: calc(100% - 6rem);
+    right: clamp(2.8rem, 7vw, 4.2rem);
+    max-width: calc(100% - 5.5rem);
   }
 
   .scrolly__subtitle {
-    font-size: 1.4rem;
+    font-size: clamp(1.25rem, 4vw, 1.6rem);
   }
 }
 
@@ -503,26 +504,26 @@ body {
 .scrolly__steps {
   position: relative;
   z-index: 2;
-  max-width: min(760px, 60vw);
-  margin: -75vh auto 50vh 10px;
-  padding: 0 1.5rem;
+  width: min(760px, 58vw);
+  margin: -75vh auto 45vh clamp(0.75rem, 2.5vw, 2.5rem);
+  padding: 0 1rem;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
   .scrolly__steps {
-    max-width: 100%;
-    margin: -65vh auto 50vh 0;
-    padding: 4.5rem 4.2rem 0 1.25rem;
+    width: 100%;
+    margin: -55vh 0 40vh 0;
+    padding: 4.5rem clamp(2.8rem, 7vw, 4.2rem) 0 clamp(0.75rem, 3vw, 1.5rem);
   }
 }
 
 .step {
-  min-height: 80vh;
+  min-height: clamp(420px, 68vh, 80vh);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 3vh;
-  padding: 2.5rem;
+  margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
+  padding: clamp(1.25rem, 3.2vw, 2.5rem);
   background-color: var(--paper-card);
   background-image:
     var(--paper-texture),
