@@ -381,28 +381,29 @@ body {
 .scrolly {
   position: relative;
   width: 100%;
+  border-bottom: 3px double var(--ink-border);
 }
 
+/* Fondo sticky transparente: el papel viene de body.
+       z-index: 3 + pointer-events: none mantiene visibles el subtítulo y la línea
+       del tiempo sin bloquear clics ni selección de texto en las tarjetas. */
 .scrolly__graphic {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 3;
   width: 100%;
   height: 100vh;
-  background-color: var(--paper-bg);
-  background-image: var(--paper-texture);
-  border-bottom: 3px double var(--ink-border);
+  pointer-events: none;
 }
 
 /* Subtítulo sticky de la sección (visible de 1919 a 1939) */
 .scrolly__subtitle-box {
   position: absolute;
   top: 12vh;
-  right: clamp(4.2rem, 5.5vw, 5.5rem);
-  max-width: clamp(200px, 24vw, 320px);
+  right: clamp(5.75rem, 5.5vw, 5.5rem);
+  max-width: clamp(170px, 22vw, 310px);
   text-align: right;
   pointer-events: none;
-  margin-right: 2vh;
 }
 
 .scrolly__kicker {
@@ -418,7 +419,7 @@ body {
 
 .scrolly__subtitle {
   font-family: var(--font-headline);
-  font-size: clamp(1.5rem, 3vw, 2.8rem);
+  font-size: clamp(1.35rem, 2.8vw, 2.8rem);
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
@@ -427,24 +428,11 @@ body {
   border-bottom: 3px double var(--ink-border);
 }
 
-/* Solo en pantallas estrechas (< 900px) */
-@media (max-width: 900px) {
-  .scrolly__subtitle-box {
-    top: 1.25rem;
-    right: clamp(2.8rem, 7vw, 4.2rem);
-    max-width: calc(100% - 5.5rem);
-  }
-
-  .scrolly__subtitle {
-    font-size: clamp(1.25rem, 4vw, 1.6rem);
-  }
-}
-
 .timeline {
   position: absolute;
   top: 12vh;
   bottom: 12vh;
-  right: 2.5rem;
+  right: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -490,33 +478,61 @@ body {
   }
 }
 
-@media (max-width: 700px) {
+/* Tarjetas narrativas a la izquierda */
+.scrolly__steps {
+  position: relative;
+  z-index: 2;
+  width: auto;
+  max-width: 760px;
+  /* Arriba -75vh | Derecha (espacio reservado) | Abajo 45vh | Izquierda */
+  margin: -75vh clamp(305px, 33vw, 430px) 45vh clamp(1rem, 4vw, 2rem);
+  padding: 0;
+}
+
+/* En ventanas estrechas y móviles (<= 768px):
+       - El subtítulo pasa arriba como cabecera fija de papel
+       - La línea del tiempo queda en el margen derecho
+       - Las tarjetas mantienen su propio margen izquierdo y derecho sin chocar */
+@media (max-width: 768px) {
+  .scrolly__subtitle-box {
+    top: 0;
+    left: 0;
+    right: 0;
+    max-width: none;
+    text-align: left;
+    padding: 0.85rem 3.5rem 0.65rem 1rem;
+    background-color: var(--paper-bg);
+    background-image: var(--paper-texture);
+    border-bottom: 2px solid var(--ink-border);
+  }
+
+  .scrolly__kicker {
+    font-size: 0.72rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .scrolly__subtitle {
+    font-size: 1.35rem;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
   .timeline {
+    top: 5.5rem;
+    bottom: 1.5rem;
     right: 0.75rem;
   }
 
   .timeline__year {
     font-size: 1rem;
   }
-}
 
-/* z-index 2: las tarjetas pasan por encima del fondo fijo */
-.scrolly__steps {
-  position: relative;
-  z-index: 2;
-  width: min(760px, 58vw);
-  margin: -75vh auto 45vh clamp(0.75rem, 2.5vw, 2.5rem);
-  padding: 0 1rem;
-}
-
-@media (max-width: 900px) {
   .scrolly__steps {
-    width: 100%;
-    margin: -55vh 0 40vh 0;
-    padding: 4.5rem clamp(2.8rem, 7vw, 4.2rem) 0 clamp(0.75rem, 3vw, 1.5rem);
+    max-width: none;
+    margin: -55vh 4.75rem 40vh 1rem;
+    padding: 0;
   }
 }
-
 .step {
   min-height: clamp(420px, 68vh, 80vh);
   display: flex;
