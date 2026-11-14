@@ -69,91 +69,86 @@ function initScrollytelling() {
       }
     }
 
-const videoSection = document.getElementById("video-scrub-section");
-const scrubVideo = document.getElementById("scrub-video");
-const progressText = document.getElementById("video-progress-text");
-const VIDEO_FPS = 30;
-const FRAME = 1 / VIDEO_FPS;
-const SMOOTHING = 12;
+const CINEMA_REELS = [
+  {
+    badge: "Rollo 01 / 04 · Material de prueba",
+    period: "Rollo 01 · 1918–1932",
+    title: "Posguerra, Versalles y Gran Depresión",
+    desc: "Analiza cómo el impacto del Tratado de Versalles en Weimar, el descontento italiano de posguerra y el desempleo masivo tras 1929 crearon el escenario que aprovecharon fascistas y nazis mediante propaganda y violencia política.",
+    source: "Fuentes: The Avalon Project, 1919; USHMM, s. f.-a; USHMM, s. f.-b; Williamson, 2023",
+    src: "/videos/prueba_video_01.mp4",
+  },
+  {
+    badge: "Rollo 02 / 04 · Material de prueba",
+    period: "Rollo 02 · 1922–1935",
+    title: "Dos Caminos al Poder: Roma y Berlín",
+    desc: "Compara el ascenso de Mussolini tras la Marcha sobre Roma (con subsistencia formal de la monarquía) frente a la llegada de Hitler en 1933, la Ley Habilitante, las SA/SS y las Leyes de Núremberg de 1935.",
+    source: "Fuentes: Gerwarth, 2020; USHMM, s. f.-c; USHMM, s. f.-d; USHMM, s. f.-e; USHMM, s. f.-f",
+    src: "/videos/prueba_video_01.mp4",
+  },
+  {
+    badge: "Rollo 03 / 04 · Material de prueba",
+    period: "Rollo 03 · 1931–1941",
+    title: "Escalada, Blitzkrieg y Viraje Global",
+    desc: "Recorre la gestación del conflicto desde Manchuria (1931) y España (1936), el apaciguamiento y el Pacto Ribbentrop-Molotov hasta la guerra relámpago en Europa, Barbarroja y Pearl Harbor.",
+    source: "Fuentes: Beevor, 2012; García Moreno, s. f.",
+    src: "/videos/prueba_video_01.mp4",
+  },
+  {
+    badge: "Rollo 04 / 04 · Material de prueba",
+    period: "Rollo 04 · 1938–1945",
+    title: "Rassenkrieg, Holocausto y Nuevo Orden",
+    desc: "Examina el proyecto de Espacio Vital y guerra racial en el Este, la industrialización del exterminio en la Shoah, las 45–55 millones de víctimas y el mundo bipolar y poscolonial de 1945.",
+    source: "Fuentes: USHMM, s. f.-g; Beevor, 2012; García Moreno, s. f.",
+    src: "/videos/prueba_video_01.mp4",
+  },
+];
 
-let targetTime = 0;
-let smoothTime = 0;
-let lastFrameStamp = 0;
-let rafId = null;
-let lastPercent = -1;
-let isVideoVisible = false;
+function initCinemaBooth() {
+  const video = document.getElementById("cinema-video");
+  const badgeEl = document.getElementById("cinema-reel-badge");
+  const periodEl = document.getElementById("cinema-period");
+  const titleEl = document.getElementById("cinema-title");
+  const descEl = document.getElementById("cinema-desc");
+  const sourceEl = document.getElementById("cinema-source");
+  const reelButtons = [...document.querySelectorAll(".cinema__reel")];
 
-function getScrollProgress() {
-  const rect = videoSection.getBoundingClientRect();
-  const scrollable = rect.height - window.innerHeight;
-  if (scrollable <= 0) return 0;
-  return Math.min(1, Math.max(0, -rect.top / scrollable));
-}
+  if (!video || reelButtons.length === 0) return;
 
-function updateVideoTarget() {
-  if (!scrubVideo.duration) return;
+  function selectReel(index, shouldAutoplay = false) {
+    const reel = CINEMA_REELS[index];
+    if (!reel) return;
 
-  const progress = getScrollProgress();
-  targetTime = progress * Math.max(0, scrubVideo.duration - FRAME);
+    reelButtons.forEach((btn, i) => {
+      const isActive = i === index;
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+    });
 
-  const percent = Math.round(progress * 100);
-  if (progressText && percent !== lastPercent) {
-    progressText.textContent = `${percent}%`;
-    lastPercent = percent;
+    if (badgeEl) badgeEl.textContent = reel.badge;
+    if (periodEl) periodEl.textContent = reel.period;
+    if (titleEl) titleEl.textContent = reel.title;
+    if (descEl) descEl.textContent = reel.desc;
+    if (sourceEl) sourceEl.textContent = reel.source;
+
+    if (video.getAttribute("src") !== reel.src) {
+      video.setAttribute("src", reel.src);
+      video.load();
+    } else {
+      video.currentTime = 0;
+    }
+
+    if (shouldAutoplay) {
+      video.play().catch(() => {});
+    }
   }
-}
 
-function tick(now) {
-  rafId = requestAnimationFrame(tick);
-
-  if (!scrubVideo.duration) return;
-
-  const dt = Math.min(0.1, (now - (lastFrameStamp || now)) / 1000);
-  lastFrameStamp = now;
-  const ease = 1 - Math.exp(-SMOOTHING * dt);
-  smoothTime += (targetTime - smoothTime) * ease;
-
-  const frameTime = Math.round(smoothTime * VIDEO_FPS) / VIDEO_FPS;
-  if (
-    !scrubVideo.seeking &&
-    Math.abs(scrubVideo.currentTime - frameTime) >= FRAME
-  ) {
-    scrubVideo.currentTime = frameTime;
-  }
-}
-
-function startLoop() {
-  if (rafId !== null || !isVideoVisible) return;
-  updateVideoTarget();
-  smoothTime = targetTime;
-  lastFrameStamp = 0;
-  rafId = requestAnimationFrame(tick);
-}
-
-function stopLoop() {
-  if (rafId === null) return;
-  cancelAnimationFrame(rafId);
-  rafId = null;
-}
-
-function initVideoScrub() {
-  if (!videoSection || !scrubVideo) return;
-
-  scrubVideo.pause();
-  scrubVideo.addEventListener("loadedmetadata", updateVideoTarget);
-  window.addEventListener("scroll", updateVideoTarget, { passive: true });
-  window.addEventListener("resize", updateVideoTarget);
-
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      isVideoVisible = entry.isIntersecting;
-      if (isVideoVisible) startLoop();
-      else stopLoop();
-    },
-    { rootMargin: "160px 0px" },
-  );
-
-  observer.observe(videoSection);
+  reelButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const index = Number(btn.dataset.reel);
+      selectReel(index, true);
+    });
+  });
 }
 
 function initCreditsModal() {
@@ -713,9 +708,9 @@ function initHistoricalNetwork() {
   let activeEdgeIndex = null;
   let jumpTargetId = null;
 
-  function computeEdgePath(r1, r2, boardRect, sameColIndex) {
-    const horizontalGap = r2.left - r1.right;
-    const sameColumn = Math.abs(r1.left - r2.left) < 12;
+function computeEdgePath(r1, r2, boardRect, sameColIndex) {
+  const horizontalGap = r2.left - r1.right;
+  const sameColumn = Math.abs(r1.left - r2.left) < 12;
 
     if (sameColumn) {
       // Arco lateral derecho para enlaces dentro de la misma columna
@@ -931,4 +926,4 @@ initHistoricalNetwork();
 initCreditsModal();
 initIntro();
 initScrollytelling();
-initVideoScrub();
+initCinemaBooth();

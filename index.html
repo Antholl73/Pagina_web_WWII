@@ -340,40 +340,121 @@
       </article>
     </section>
 
-    <!-- SECCIÓN PRODUCCIÓN AUDIOVISUAL: Video Scrubbing -->
-    <section class="video-scrub" id="video-scrub-section">
-      <!-- Contenedor Sticky: Se queda fijo mientras recorremos los 300vh -->
-      <div class="video-scrub__sticky">
-        <!-- Video con atributos esenciales para control por script:
-    		 muted y playsinline son obligatorios para que los navegadores modernos permitan controlarlo -->
-        <video
-          id="scrub-video"
-          class="video-scrub__media"
-          src="/videos/loading_screen_ultrakill_scrub.mp4"
-          preload="auto"
-          muted
-          playsinline
-        ></video>
+    <!-- SECCIÓN PRODUCCIÓN AUDIOVISUAL -->
+    <section class="cinema" id="archivo-audiovisual">
+      <div class="cinema__container">
+        <header class="cinema__header">
+          <div>
+            <span class="cinema__kicker">Sección II</span>
+            <h2 class="cinema__title"></h2>
+          </div>
+        </header>
 
-        <!-- Capa de oscurecimiento cinematográfico para legibilidad -->
-        <div class="video-scrub__overlay"></div>
+        <div class="cinema__booth">
+          <!-- Pantalla principal del proyector -->
+          <div class="cinema__stage">
+            <div class="cinema__screen-frame">
+              <video
+                id="cinema-video"
+                class="cinema__video"
+                src="/videos/prueba_video_01.mp4"
+                controls
+                preload="metadata"
+                playsinline
+              ></video>
+            </div>
 
-        <!-- Texto explicativo que acompaña al video -->
-        <div class="video-scrub__caption">
-          <span class="caption__tag"
-            >Archivo Histórico · Producción Audiovisual</span
+            <div class="cinema__notes">
+              <div class="cinema__notes-top">
+                <span class="cinema__notes-period" id="cinema-period">
+                  Rollo 01 · 1918–1932
+                </span>
+                <span class="cinema__notes-source" id="cinema-source">
+                  Fuentes: The Avalon Project, 1919; USHMM, s. f.-a; USHMM, s.
+                  f.-b; Williamson, 2023
+                </span>
+              </div>
+              <h3 class="cinema__notes-title" id="cinema-title">
+                Posguerra, Versalles y Gran Depresión
+              </h3>
+              <p class="cinema__notes-text" id="cinema-desc">
+                Analiza cómo el impacto del Tratado de Versalles en Weimar, el
+                descontento italiano de posguerra y el desempleo masivo tras
+                1929 crearon el escenario que aprovecharon fascistas y nazis
+                mediante propaganda y violencia política.
+              </p>
+            </div>
+          </div>
+
+          <!-- Selector de los 4 capítulos (rollos de archivo) -->
+          <div
+            class="cinema__playlist"
+            role="tablist"
+            aria-label="Capítulos audiovisuales"
           >
-          <h2 class="caption__title">
-            La Maquinaria de la Propaganda y Movilización
-          </h2>
-          <p class="caption__desc">
-            Desplaza el cursor lentamente para controlar los fotogramas del
-            archivo. Observa la coreografía de masas y la estética monumental
-            utilizada para subordinar al individuo ante el Estado totalitario.
-          </p>
-          <div class="caption__progress">
-            <span>Progreso del metraje:</span>
-            <span id="video-progress-text">0%</span>
+            <button
+              type="button"
+              class="cinema__reel is-active"
+              role="tab"
+              aria-selected="true"
+              data-reel="0"
+            >
+              <span class="cinema__reel-num">Rollo 01 · 1918–1932</span>
+              <span class="cinema__reel-title">
+                Posguerra, Versalles y Gran Depresión
+              </span>
+              <span class="cinema__reel-sub">
+                Crisis económica, Weimar y temor al socialismo
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="cinema__reel"
+              role="tab"
+              aria-selected="false"
+              data-reel="1"
+            >
+              <span class="cinema__reel-num">Rollo 02 · 1922–1935</span>
+              <span class="cinema__reel-title">
+                Dos Caminos al Poder: Roma y Berlín
+              </span>
+              <span class="cinema__reel-sub">
+                Marcha sobre Roma, Ley Habilitante y Núremberg
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="cinema__reel"
+              role="tab"
+              aria-selected="false"
+              data-reel="2"
+            >
+              <span class="cinema__reel-num">Rollo 03 · 1931–1941</span>
+              <span class="cinema__reel-title">
+                Escalada, Blitzkrieg y Viraje Global
+              </span>
+              <span class="cinema__reel-sub">
+                Precursores, apaciguamiento, Pacto de 1939 y Barbarroja
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="cinema__reel"
+              role="tab"
+              aria-selected="false"
+              data-reel="3"
+            >
+              <span class="cinema__reel-num">Rollo 04 · 1938–1945</span>
+              <span class="cinema__reel-title">
+                Rassenkrieg, Holocausto y Nuevo Orden
+              </span>
+              <span class="cinema__reel-sub">
+                Shoah, guerra total, Guerra Fría y descolonización
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -384,7 +465,7 @@
       <div class="network__container">
         <header class="network__header">
           <div>
-            <span class="network__kicker">Sección II · Mapa Causal</span>
+            <span class="network__kicker">Sección III · Mapa Causal</span>
             <h2 class="network__title">Red de Relaciones Históricas</h2>
           </div>
           <button
@@ -541,7 +622,10 @@
         >
           <div class="network__detail-top">
             <div>
-              <span class="network__detail-category" id="detail-category"></span>
+              <span
+                class="network__detail-category"
+                id="detail-category"
+              ></span>
               <h3 class="network__detail-title" id="detail-title"></h3>
             </div>
             <span class="network__detail-source" id="detail-source"></span>
@@ -558,7 +642,11 @@
             <p class="network__edge-why" id="detail-edge-why"></p>
             <div class="network__edge-footer">
               <span class="network__edge-source" id="detail-edge-source"></span>
-              <button type="button" class="network__edge-jump" id="detail-edge-jump">
+              <button
+                type="button"
+                class="network__edge-jump"
+                id="detail-edge-jump"
+              >
                 Explorar nodo conectado →
               </button>
             </div>
@@ -615,27 +703,32 @@
             <ul class="colophon__sources">
               <li>
                 Acemoglu, D., De Feo, G., De Luca, G., &amp; Russo, G. (2022).
-                War, socialism, and the rise of fascism: An empirical exploration.
+                War, socialism, and the rise of fascism: An empirical
+                exploration.
                 <em>The Quarterly Journal of Economics</em>, 137(2), 1233–1296.
               </li>
               <li>
-                Beevor, A. (2012). <em>La Segunda Guerra Mundial: Una historia gráfica</em>.
+                Beevor, A. (2012).
+                <em>La Segunda Guerra Mundial: Una historia gráfica</em>.
               </li>
               <li>
-                García Moreno, F. (s. f.). <em>La Segunda Guerra Mundial y sus consecuencias</em>
+                García Moreno, F. (s. f.).
+                <em>La Segunda Guerra Mundial y sus consecuencias</em>
                 [Dossier académico base].
               </li>
               <li>
-                Gerwarth, R. (2020). March on Rome: Violence and the rise of Italian
-                fascism, by Giulia Albanese. <em>The English Historical Review</em>,
-                135(576), 1364–1366.
+                Gerwarth, R. (2020). March on Rome: Violence and the rise of
+                Italian fascism, by Giulia Albanese.
+                <em>The English Historical Review</em>, 135(576), 1364–1366.
               </li>
               <li>
-                Passmore, K. (2014). <em>Fascism: A very short introduction</em> (2nd ed.).
-                Oxford University Press.
+                Passmore, K. (2014).
+                <em>Fascism: A very short introduction</em> (2nd ed.). Oxford
+                University Press.
               </li>
               <li>
-                The Avalon Project. (1919). <em>The Versailles Treaty</em>. Yale Law School.
+                The Avalon Project. (1919). <em>The Versailles Treaty</em>. Yale
+                Law School.
               </li>
               <li>
                 United States Holocaust Memorial Museum [USHMM]. (s. f.-a).
@@ -643,7 +736,8 @@
               </li>
               <li>
                 United States Holocaust Memorial Museum [USHMM]. (s. f.-b).
-                <em>Adolf Hitler and the Nazi rise to power, 1918–1933</em>. Holocaust Encyclopedia.
+                <em>Adolf Hitler and the Nazi rise to power, 1918–1933</em>.
+                Holocaust Encyclopedia.
               </li>
               <li>
                 United States Holocaust Memorial Museum [USHMM]. (s. f.-c).
@@ -666,9 +760,10 @@
                 <em>The Holocaust: Key questions</em>. Holocaust Encyclopedia.
               </li>
               <li>
-                Williamson, P. J. (2023). The rise of Mussolini and the Fascists:
-                Establishing a dictatorship. En <em>Duce: The contradictions of power</em>.
-                Oxford University Press.
+                Williamson, P. J. (2023). The rise of Mussolini and the
+                Fascists: Establishing a dictatorship. En
+                <em>Duce: The contradictions of power</em>. Oxford University
+                Press.
               </li>
             </ul>
           </section>
