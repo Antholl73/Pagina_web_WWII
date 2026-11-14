@@ -688,9 +688,8 @@ function initHistoricalNetwork() {
   const board = document.getElementById("network-board");
   const svg = document.getElementById("network-svg");
   const resetBtn = document.getElementById("network-reset-btn");
-  const filterButtons = [...document.querySelectorAll(".network__filter-btn")];
-  const statsEl = document.getElementById("network-stats");
 
+  const detailPanel = document.getElementById("network-detail");
   const detailCategory = document.getElementById("detail-category");
   const detailTitle = document.getElementById("detail-title");
   const detailSource = document.getElementById("detail-source");
@@ -703,12 +702,6 @@ function initHistoricalNetwork() {
   const edgeSource = document.getElementById("detail-edge-source");
   const edgeJumpBtn = document.getElementById("detail-edge-jump");
 
-  const relationsGrid = document.getElementById("detail-relations");
-  const groupIn = document.getElementById("detail-group-in");
-  const groupOut = document.getElementById("detail-group-out");
-  const linksInEl = document.getElementById("detail-links-in");
-  const linksOutEl = document.getElementById("detail-links-out");
-
   if (!board || !svg) return;
 
   const nodeButtons = [...board.querySelectorAll(".net-node")];
@@ -716,14 +709,9 @@ function initHistoricalNetwork() {
     nodeButtons.map((btn) => [btn.dataset.node, btn]),
   );
 
-  let activeFilter = "all";
   let activeNodeId = null;
   let activeEdgeIndex = null;
   let jumpTargetId = null;
-
-  function edgeMatchesFilter(edge) {
-    return activeFilter === "all" || edge.axes.includes(activeFilter);
-  }
 
   function computeEdgePath(r1, r2, boardRect, sameColIndex) {
     const horizontalGap = r2.left - r1.right;
@@ -749,7 +737,7 @@ function initHistoricalNetwork() {
     }
 
     if (r1.left - r2.right > 8) {
-      // Enlace de derecha a izquierda (si ocurre en móvil o tablero 2x2)
+      // Enlace de derecha a izquierda (en tableros 2x2)
       const x1 = r1.left - boardRect.left;
       const y1 = r1.top + r1.height / 2 - boardRect.top;
       const x2 = r2.right - boardRect.left;
@@ -801,26 +789,8 @@ function initHistoricalNetwork() {
     updateHighlights();
   }
 
-  function updateStats(visibleCount) {
-    if (!statsEl) return;
-    if (activeFilter === "all") {
-      statsEl.textContent = `${Object.keys(NETWORK_DATA).length} nodos · ${NETWORK_EDGES.length} relaciones sustentadas`;
-    } else {
-      statsEl.textContent = `Eje filtrado · ${visibleCount} relaciones activas`;
-    }
-  }
-
   function updateHighlights() {
     const paths = [...svg.querySelectorAll(".net-edge")];
-    const visibleEdges = NETWORK_EDGES.filter(edgeMatchesFilter);
-    const visibleNodes = new Set();
-
-    visibleEdges.forEach((e) => {
-      visibleNodes.add(e.from);
-      visibleNodes.add(e.to);
-    });
-    updateStats(visibleEdges.length);
-
     const focusedEdge = activeEdgeIndex !== null ? NETWORK_EDGES[activeEdgeIndex] : null;
     const connectedIds = new Set();
 
@@ -830,11 +800,13 @@ function initHistoricalNetwork() {
     } else if (activeNodeId) {
       connectedIds.add(activeNodeId);
       NETWORK_EDGES.forEach((edge) => {
-        if (!edgeMatchesFilter(edge)) return;
         if (edge.from === activeNodeId) connectedIds.add(edge.to);
         if (edge.to === activeNodeId) connectedIds.add(edge.from);
       });
     }
+
+    const hasSelection = Boolean(activeNodeId) || Boolean(focusedEdge);
+    if (resetBtn) resetBtn.hidden = !hasSelection;
 
     nodeButtons.forEach((btn) => {
       const id = btn.dataset.node;
@@ -843,28 +815,20 @@ function initHistoricalNetwork() {
       const isConnected =
         (!focusedEdge && Boolean(activeNodeId) && !isSelected && connectedIds.has(id)) ||
         (Boolean(focusedEdge) && isFocusEnd && !isSelected);
-      const hiddenByFilter = activeFilter !== "all" && !visibleNodes.has(id);
-      const dimmedBySelection =
-        (Boolean(activeNodeId) || Boolean(focusedEdge)) && !connectedIds.has(id);
 
       btn.classList.toggle("is-selected", isSelected);
       btn.classList.toggle("is-connected", isConnected);
-      btn.classList.toggle("is-dimmed", hiddenByFilter || dimmedBySelection);
+      btn.classList.toggle("is-dimmed", hasSelection && !connectedIds.has(id));
     });
 
     paths.forEach((path) => {
       const index = Number(path.dataset.index);
       const edge = NETWORK_EDGES[index];
-      const inFilter = edgeMatchesFilter(edge);
 
       const isFocused = index === activeEdgeIndex;
-      const isOutgoing =
-        !focusedEdge && Boolean(activeNodeId) && inFilter && edge.from === activeNodeId;
-      const isIncoming =
-        !focusedEdge && Boolean(activeNodeId) && inFilter && edge.to === activeNodeId;
-
-      const hasSelection = Boolean(activeNodeId) || Boolean(focusedEdge);
-      const isDimmed = !inFilter || (hasSelection && !isFocused && !isOutgoing && !isIncoming);
+      const isOutgoing = !focusedEdge && Boolean(activeNodeId) && edge.from === activeNodeId;
+      const isIncoming = !focusedEdge && Boolean(activeNodeId) && edge.to === activeNodeId;
+      const isDimmed = hasSelection && !isFocused && !isOutgoing && !isIncoming;
 
       path.classList.toggle("is-focused", isFocused);
       path.classList.toggle("is-outgoing", isOutgoing);
@@ -897,44 +861,10 @@ function initHistoricalNetwork() {
     edgeCard.hidden = false;
   }
 
-  function createRelationChip(edgeIndex, direction) {
-    const edge = NETWORK_EDGES[edgeIndex];
-    const neighborId = direction === "out" ? edge.to : edge.from;
-    const arrow = direction === "out" ? "→" : "←";
-
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = `network__chip ${direction === "out" ? "is-outgoing" : "is-incoming"}`;
-    chip.classList.toggle("is-active", edgeIndex === activeEdgeIndex);
-    chip.textContent = `${arrow} ${NETWORK_DATA[neighborId].title} (${edge.kind})`;
-
-    chip.addEventListener("click", () => {
-      activeEdgeIndex = activeEdgeIndex === edgeIndex ? null : edgeIndex;
-      updateHighlights();
-      renderEdgeCard(activeEdgeIndex, activeNodeId);
-
-      // Actualiza estado visual de los chips activos
-      document.querySelectorAll(".network__chip").forEach((el) => el.classList.remove("is-active"));
-      if (activeEdgeIndex === edgeIndex) {
-        chip.classList.add("is-active");
-      }
-    });
-
-    return chip;
-  }
-
-  function renderNodeDetails(nodeId) {
+  function renderDetails(nodeId) {
     if (!nodeId || !NETWORK_DATA[nodeId]) {
-      detailCategory.textContent = "Explorador Causal Sustentado";
-      detailTitle.textContent = "Selecciona una ficha o una línea de conexión";
-      detailSource.textContent =
-        "Base documental: USHMM · Williamson · Gerwarth · Passmore · Acemoglu et al. · Beevor · García Moreno";
-      detailText.textContent =
-        "Haz clic en cualquier nodo para iluminar sus causas previas (en tinta oscura) y los procesos que impulsa (en rojo). Luego selecciona cualquier relación para leer su justificación histórica y fuente bibliográfica exacta.";
+      detailPanel.hidden = true;
       edgeCard.hidden = true;
-      relationsGrid.hidden = true;
-      linksInEl.innerHTML = "";
-      linksOutEl.innerHTML = "";
       return;
     }
 
@@ -944,36 +874,15 @@ function initHistoricalNetwork() {
     detailSource.textContent = `Fuentes: ${info.sources}`;
     detailText.textContent = info.text;
 
-    linksInEl.innerHTML = "";
-    linksOutEl.innerHTML = "";
-
-    let inCount = 0;
-    let outCount = 0;
-
-    NETWORK_EDGES.forEach((edge, index) => {
-      if (!edgeMatchesFilter(edge)) return;
-      if (edge.to === nodeId) {
-        linksInEl.appendChild(createRelationChip(index, "in"));
-        inCount++;
-      } else if (edge.from === nodeId) {
-        linksOutEl.appendChild(createRelationChip(index, "out"));
-        outCount++;
-      }
-    });
-
-    groupIn.hidden = inCount === 0;
-    groupOut.hidden = outCount === 0;
-    relationsGrid.hidden = inCount === 0 && outCount === 0;
     renderEdgeCard(activeEdgeIndex, nodeId);
+    detailPanel.hidden = false;
   }
 
-  function selectNode(nodeId, preserveEdge = false) {
-    if (!preserveEdge) {
-      activeEdgeIndex = null;
-    }
-    activeNodeId = activeNodeId === nodeId && !preserveEdge ? null : nodeId;
+  function selectNode(nodeId) {
+    activeEdgeIndex = null;
+    activeNodeId = activeNodeId === nodeId ? null : nodeId;
     updateHighlights();
-    renderNodeDetails(activeNodeId);
+    renderDetails(activeNodeId);
   }
 
   function inspectEdge(edgeIndex) {
@@ -983,21 +892,11 @@ function initHistoricalNetwork() {
     activeNodeId = edge.from;
     activeEdgeIndex = edgeIndex;
     updateHighlights();
-    renderNodeDetails(edge.from);
+    renderDetails(edge.from);
   }
 
   nodeButtons.forEach((btn) => {
     btn.addEventListener("click", () => selectNode(btn.dataset.node));
-  });
-
-  filterButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      activeFilter = btn.dataset.filter || "all";
-      filterButtons.forEach((b) => b.classList.toggle("is-active", b === btn));
-      activeEdgeIndex = null;
-      updateHighlights();
-      renderNodeDetails(activeNodeId);
-    });
   });
 
   edgeJumpBtn?.addEventListener("click", () => {
@@ -1005,19 +904,15 @@ function initHistoricalNetwork() {
       activeNodeId = jumpTargetId;
       activeEdgeIndex = null;
       updateHighlights();
-      renderNodeDetails(jumpTargetId);
+      renderDetails(jumpTargetId);
     }
   });
 
   resetBtn?.addEventListener("click", () => {
-    activeFilter = "all";
     activeNodeId = null;
     activeEdgeIndex = null;
-    filterButtons.forEach((b) =>
-      b.classList.toggle("is-active", b.dataset.filter === "all"),
-    );
     updateHighlights();
-    renderNodeDetails(null);
+    renderDetails(null);
   });
 
   // Dibuja las líneas al cargar fuentes y al redimensionar la ventana

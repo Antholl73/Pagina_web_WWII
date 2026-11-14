@@ -384,71 +384,18 @@
       <div class="network__container">
         <header class="network__header">
           <div>
-            <span class="network__kicker">Sección II · Mapa Causal Sustentado</span>
+            <span class="network__kicker">Sección II · Mapa Causal</span>
             <h2 class="network__title">Red de Relaciones Históricas</h2>
-            <p class="network__intro">
-              Selecciona cualquier ficha <strong>o haz clic sobre una línea de conexión</strong>
-              para ver cómo se articulan las <strong>causas</strong>, los
-              <strong>actores</strong>, los <strong>acontecimientos</strong> y sus
-              <strong>consecuencias</strong> desde 1918 hasta el nuevo orden de 1945,
-              con respaldo documental directo.
-            </p>
           </div>
-          <div class="network__controls">
-            <div
-              class="network__filters"
-              id="network-filters"
-              role="group"
-              aria-label="Filtrar ejes históricos"
-            >
-              <button
-                type="button"
-                class="network__filter-btn is-active"
-                data-filter="all"
-              >
-                Todas las relaciones
-              </button>
-              <button
-                type="button"
-                class="network__filter-btn"
-                data-filter="ascenso"
-              >
-                Ascenso Fascista / Nazi
-              </button>
-              <button
-                type="button"
-                class="network__filter-btn"
-                data-filter="camino-1939"
-              >
-                Camino a 1939
-              </button>
-              <button
-                type="button"
-                class="network__filter-btn"
-                data-filter="guerra-orden"
-              >
-                Guerra Total y Consecuencias
-              </button>
-            </div>
-            <button type="button" class="network__reset" id="network-reset-btn">
-              Limpiar selección
-            </button>
-          </div>
+          <button
+            type="button"
+            class="network__reset"
+            id="network-reset-btn"
+            hidden
+          >
+            Limpiar selección
+          </button>
         </header>
-
-        <div class="network__legend" aria-hidden="true">
-          <span class="network__legend-item">
-            <span class="network__legend-swatch is-outgoing"></span>
-            Genera / impulsa (salida)
-          </span>
-          <span class="network__legend-item">
-            <span class="network__legend-swatch is-incoming"></span>
-            Explicado por / recibe (entrada)
-          </span>
-          <span class="network__legend-stat" id="network-stats">
-            20 nodos · 46 relaciones sustentadas
-          </span>
-        </div>
 
         <!-- Tablero de 4 columnas + capa SVG para las líneas -->
         <div class="network__board" id="network-board">
@@ -585,51 +532,35 @@
           </div>
         </div>
 
-        <!-- Ficha explicativa del nodo o relación seleccionada -->
-        <aside class="network__detail" id="network-detail" aria-live="polite">
+        <!-- Ficha explicativa (oculta hasta seleccionar nodo o línea) -->
+        <aside
+          class="network__detail"
+          id="network-detail"
+          aria-live="polite"
+          hidden
+        >
           <div class="network__detail-top">
             <div>
-              <span class="network__detail-category" id="detail-category">
-                Explorador Causal Sustentado
-              </span>
-              <h3 class="network__detail-title" id="detail-title">
-                Selecciona una ficha o una línea de conexión
-              </h3>
+              <span class="network__detail-category" id="detail-category"></span>
+              <h3 class="network__detail-title" id="detail-title"></h3>
             </div>
-            <span class="network__detail-source" id="detail-source">
-              Base documental: USHMM · Williamson · Gerwarth · Passmore · Acemoglu et al. · Beevor · García Moreno
-            </span>
+            <span class="network__detail-source" id="detail-source"></span>
           </div>
 
-          <p class="network__detail-text" id="detail-text">
-            Haz clic en cualquier nodo para iluminar sus causas previas (en tinta oscura)
-            y los procesos que impulsa (en rojo). Luego selecciona cualquier relación para leer
-            su justificación histórica y fuente bibliográfica exacta.
-          </p>
+          <p class="network__detail-text" id="detail-text"></p>
 
-          <!-- Tarjeta de evidencia específica cuando se inspecciona una arista -->
+          <!-- Evidencia específica al hacer clic en una línea de conexión -->
           <div class="network__edge-card" id="detail-edge-card" hidden>
             <div class="network__edge-meta">
-              <span class="network__edge-badge" id="detail-edge-kind">Relación causal</span>
+              <span class="network__edge-badge" id="detail-edge-kind"></span>
               <span class="network__edge-route" id="detail-edge-route"></span>
             </div>
             <p class="network__edge-why" id="detail-edge-why"></p>
             <div class="network__edge-footer">
               <span class="network__edge-source" id="detail-edge-source"></span>
               <button type="button" class="network__edge-jump" id="detail-edge-jump">
-                Ir al nodo conectado →
+                Explorar nodo conectado →
               </button>
-            </div>
-          </div>
-
-          <div class="network__relations-grid" id="detail-relations" hidden>
-            <div class="network__relation-group" id="detail-group-in">
-              <h4 class="network__relation-heading">← Factores que lo explican</h4>
-              <div class="network__detail-links" id="detail-links-in"></div>
-            </div>
-            <div class="network__relation-group" id="detail-group-out">
-              <h4 class="network__relation-heading">→ Procesos e impactos que impulsa</h4>
-              <div class="network__detail-links" id="detail-links-out"></div>
             </div>
           </div>
         </aside>
