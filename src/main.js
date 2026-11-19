@@ -1,25 +1,10 @@
 import scrollama from "scrollama";
+import { initIntro } from "./intro.js";
 
 const timelineYearEl = document.getElementById("timeline-year");
 const stepElements = document.querySelectorAll(".step");
 
 const scroller = scrollama();
-const introEl = document.getElementById("intro");
-
-function initIntro() {
-  if (!introEl) return;
-
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  const reveal = () => {
-    introEl.classList.add("is-complete");
-    window.setTimeout(() => introEl.remove(), reduceMotion ? 20 : 1150);
-  };
-
-  window.setTimeout(reveal, reduceMotion ? 80 : 1800);
-}
-
 function updateTimeline(year) {
   if (!timelineYearEl || !year) return;
 
@@ -69,86 +54,21 @@ function initScrollytelling() {
       }
     }
 
-const CINEMA_REELS = [
-  {
-    badge: "Rollo 01 / 04 · Material de prueba",
-    period: "Rollo 01 · 1918–1932",
-    title: "Posguerra, Versalles y Gran Depresión",
-    desc: "Analiza cómo el impacto del Tratado de Versalles en Weimar, el descontento italiano de posguerra y el desempleo masivo tras 1929 crearon el escenario que aprovecharon fascistas y nazis mediante propaganda y violencia política.",
-    source: "Fuentes: The Avalon Project, 1919; USHMM, s. f.-a; USHMM, s. f.-b; Williamson, 2023",
-    src: "/videos/prueba_video_01.mp4",
-  },
-  {
-    badge: "Rollo 02 / 04 · Material de prueba",
-    period: "Rollo 02 · 1922–1935",
-    title: "Dos Caminos al Poder: Roma y Berlín",
-    desc: "Compara el ascenso de Mussolini tras la Marcha sobre Roma (con subsistencia formal de la monarquía) frente a la llegada de Hitler en 1933, la Ley Habilitante, las SA/SS y las Leyes de Núremberg de 1935.",
-    source: "Fuentes: Gerwarth, 2020; USHMM, s. f.-c; USHMM, s. f.-d; USHMM, s. f.-e; USHMM, s. f.-f",
-    src: "/videos/prueba_video_01.mp4",
-  },
-  {
-    badge: "Rollo 03 / 04 · Material de prueba",
-    period: "Rollo 03 · 1931–1941",
-    title: "Escalada, Blitzkrieg y Viraje Global",
-    desc: "Recorre la gestación del conflicto desde Manchuria (1931) y España (1936), el apaciguamiento y el Pacto Ribbentrop-Molotov hasta la guerra relámpago en Europa, Barbarroja y Pearl Harbor.",
-    source: "Fuentes: Beevor, 2012; García Moreno, s. f.",
-    src: "/videos/prueba_video_01.mp4",
-  },
-  {
-    badge: "Rollo 04 / 04 · Material de prueba",
-    period: "Rollo 04 · 1938–1945",
-    title: "Rassenkrieg, Holocausto y Nuevo Orden",
-    desc: "Examina el proyecto de Espacio Vital y guerra racial en el Este, la industrialización del exterminio en la Shoah, las 45–55 millones de víctimas y el mundo bipolar y poscolonial de 1945.",
-    source: "Fuentes: USHMM, s. f.-g; Beevor, 2012; García Moreno, s. f.",
-    src: "/videos/prueba_video_01.mp4",
-  },
-];
+// ==========================================================================
+// SECCIÓN II: BIBLIOTECA DE SIMON (iframe con public/biblioteca/)
+// Cuando la sección sale de la pantalla, se calla a Simon y se baja la música.
+// ==========================================================================
 
-function initCinemaBooth() {
-  const video = document.getElementById("cinema-video");
-  const badgeEl = document.getElementById("cinema-reel-badge");
-  const periodEl = document.getElementById("cinema-period");
-  const titleEl = document.getElementById("cinema-title");
-  const descEl = document.getElementById("cinema-desc");
-  const sourceEl = document.getElementById("cinema-source");
-  const reelButtons = [...document.querySelectorAll(".cinema__reel")];
+function initLibrary() {
+  const frame = document.getElementById("library-frame");
+  if (!frame) return;
 
-  if (!video || reelButtons.length === 0) return;
-
-  function selectReel(index, shouldAutoplay = false) {
-    const reel = CINEMA_REELS[index];
-    if (!reel) return;
-
-    reelButtons.forEach((btn, i) => {
-      const isActive = i === index;
-      btn.classList.toggle("is-active", isActive);
-      btn.setAttribute("aria-selected", String(isActive));
-    });
-
-    if (badgeEl) badgeEl.textContent = reel.badge;
-    if (periodEl) periodEl.textContent = reel.period;
-    if (titleEl) titleEl.textContent = reel.title;
-    if (descEl) descEl.textContent = reel.desc;
-    if (sourceEl) sourceEl.textContent = reel.source;
-
-    if (video.getAttribute("src") !== reel.src) {
-      video.setAttribute("src", reel.src);
-      video.load();
-    } else {
-      video.currentTime = 0;
-    }
-
-    if (shouldAutoplay) {
-      video.play().catch(() => {});
-    }
-  }
-
-  reelButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const index = Number(btn.dataset.reel);
-      selectReel(index, true);
-    });
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) return;
+    // window.pausarBiblioteca está definida en public/biblioteca/app.js
+    frame.contentWindow?.pausarBiblioteca?.();
   });
+  observer.observe(frame);
 }
 
 function initCreditsModal() {
@@ -926,4 +846,4 @@ initHistoricalNetwork();
 initCreditsModal();
 initIntro();
 initScrollytelling();
-initCinemaBooth();
+initLibrary();

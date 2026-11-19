@@ -2,10 +2,12 @@
 
 Página web interactiva (*scrollytelling*) que cuenta la historia de la Segunda Guerra Mundial, centrada en el ascenso del nazismo en Alemania y del fascismo en Italia. Tiene el estilo de un periódico de los años 30: papel envejecido, tinta de imprenta y titulares de prensa.
 
-Al hacer scroll:
+El recorrido de la página:
 
-- Las tarjetas de texto avanzan por los años clave (1919, 1922, 1929, 1933, 1939) y el año gigante del fondo se actualiza.
-- En la sección final, el scroll controla los fotogramas de un vídeo (*video scrubbing*).
+1. **Introducción**: un telón con fotos de época y un botón *Comenzar* que reproduce el vídeo cinematográfico de introducción.
+2. **Portada y contexto histórico**: las tarjetas avanzan por los años clave (1919, 1922, 1929, 1933, 1939) y una línea del tiempo a la derecha muestra el año de cada suceso.
+3. **Sección II · Biblioteca de Simon**: un estante con siete capítulos. Los libros se abren y Simon, el gato condecorado con la Medalla Dickin, los narra página a página con mapa y preguntas; algunos capítulos son vídeos.
+4. **Sección III · Red de relaciones**: un mapa causal interactivo entre causas, actores, acontecimientos y consecuencias.
 
 ---
 
@@ -21,7 +23,7 @@ Necesitas tener instalado:
 
 > Si `node -v` muestra una versión más antigua (por ejemplo `v18.x`), instala la versión LTS desde [nodejs.org](https://nodejs.org/). Vite 8 no funciona con Node 18.
 
-También necesitas **conexión a internet** la primera vez, para instalar las dependencias. Las tipografías (Oswald y Newsreader) se cargan siempre desde Google Fonts.
+También necesitas **conexión a internet** la primera vez, para instalar las dependencias. Las tipografías se cargan siempre desde Google Fonts, y el mapa de la biblioteca (Leaflet) necesita internet para mostrar las teselas.
 
 ---
 
@@ -102,33 +104,29 @@ Y abre la dirección que indique la terminal (por defecto **http://localhost:417
 Pagina_web_WWII/
 ├── index.html          → Contenido de la página y filtro SVG de tinta (#ink-rough)
 ├── src/
-│   ├── style.css       → Estilos: paleta de periódico, textura de papel, tarjetas, vídeo
-│   └── main.js         → Lógica: Scrollama (tarjetas y años) y video scrubbing
+│   ├── style.css       → Estilos: telón, periódico, tarjetas, biblioteca, red y créditos
+│   ├── intro.js        → Telón de introducción y vídeo cinematográfico
+│   └── main.js         → Scrollama (tarjetas y años), biblioteca, red de relaciones y créditos
 ├── public/
-│   └── videos/         → Vídeos; se sirven tal cual en /videos/...
+│   ├── images/         → Fotografías de prensa de las tarjetas
+│   └── biblioteca/     → Sección II: página aparte que se muestra con un iframe
+│       ├── index.html, app.js, estilos.css, config.js
+│       ├── assets/     → Simon, música, fotos del telón y vídeo de introducción (intro.mp4)
+│       └── capitulos/  → Un capítulo por carpeta: capitulo.js + audios e imágenes
 ├── package.json        → Dependencias y comandos (dev, build, preview)
 └── dist/               → Versión final generada por "npm run build" (no se sube a git)
 ```
 
 ---
 
-## 7. Cambiar el vídeo del scroll (opcional)
+## 7. Editar la biblioteca de Simon (opcional)
 
-Para que el vídeo avance con fluidez al hacer scroll, **cada fotograma debe ser un keyframe**. Un vídeo normal descargado de internet irá a tirones.
+La Sección II es una página independiente en `public/biblioteca/`. Se puede abrir sola en **http://localhost:5173/biblioteca/** para probarla sin recorrer toda la web.
 
-1. Instala [FFmpeg](https://ffmpeg.org/download.html).
-2. Convierte tu vídeo:
-
-   ```bash
-   ffmpeg -i mi_video.mp4 -an -vf "scale=1280:-2,fps=30" -c:v libx264 -preset slow -crf 26 -g 1 -pix_fmt yuv420p -movflags +faststart public/videos/mi_video_scrub.mp4
-   ```
-
-   - `-g 1` → un keyframe en cada fotograma (lo más importante).
-   - `scale=1280:-2,fps=30` → 720p a 30 fps, para que el archivo pese poco.
-   - `-an` → quita el audio (no se usa).
-
-3. En `index.html`, cambia el `src` del `<video id="scrub-video">` por `/videos/mi_video_scrub.mp4`.
-4. Si usaste otros fps, cambia `VIDEO_FPS` en `src/main.js` al mismo valor.
+- **Textos, audios y mapas de un capítulo**: `public/biblioteca/capitulos/<número>/capitulo.js`.
+- **Añadir un capítulo**: crea su carpeta con `capitulo.js` y añade su `<script>` en `public/biblioteca/index.html`.
+- **Música y presentación de Simon**: `public/biblioteca/config.js`.
+- **Vídeo de introducción**: `public/biblioteca/assets/intro.mp4` (lo usa el telón; la ruta está en `src/intro.js`).
 
 ---
 
@@ -140,7 +138,8 @@ Para que el vídeo avance con fluidez al hacer scroll, **cada fotograma debe ser
 | Error al ejecutar `npm run dev` mencionando la versión de Node | Actualiza Node.js a 20.19+ o 22.12+ (sección 1). |
 | `Port 5173 is in use` | Vite usará otro puerto automáticamente (5174, 5175…). Abre la dirección que indique la terminal. |
 | `vite: not found` | Falta instalar las dependencias: ejecuta `npm install`. |
-| El vídeo aparece en negro | Comprueba que el archivo existe en `public/videos/` y que el `src` en `index.html` empieza por `/videos/`. |
+| El vídeo de introducción no arranca | Pulsa **Saltar introducción**. Comprueba que existe `public/biblioteca/assets/intro.mp4`. |
+| Simon no habla | El sonido necesita un clic dentro de la biblioteca: pulsa **Conocer a Simon** y revisa que la voz no esté silenciada (botón del altavoz). |
 | Las letras se ven con una tipografía genérica | No hay conexión a internet: las fuentes vienen de Google Fonts. |
 | Aparecen líneas horizontales en la página | Es el modo depuración de Scrollama. Cambia `debug: true` a `debug: false` en `src/main.js`. |
 

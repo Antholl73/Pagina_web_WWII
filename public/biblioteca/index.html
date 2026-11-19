@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Biblioteca de Simon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@600;700&family=Big+Shoulders+Stencil+Display:wght@700;900&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="./estilos.css">
+</head>
+<!-- Esta página se muestra dentro de la Sección II de la web principal (iframe).
+     El telón y el video de introducción están en la web principal. -->
+<body class="intro">
+
+  <div class="table"></div>
+
+  <div class="wallgroup" id="wallgroup">
+    <div class="wall"></div>
+    <div class="shelf-board"></div>
+    <div class="shelf-books" id="shelf"></div>
+  </div>
+
+  <p class="hint" id="hint">Elige un capítulo del estante</p>
+
+  <div class="scene" id="scene">
+    <div class="book" id="book">
+      <div class="book-shadow"></div>
+      <div class="base base-r"></div>
+      <div class="base base-l"></div>
+    </div>
+  </div>
+
+  <div class="light"></div>
+  <div class="vignette"></div>
+
+  <div class="simon" id="simon">
+    <img id="simonImg" alt="Simon">
+  </div>
+  <div class="bubble" id="bubble">
+    <p id="bubble-text"></p>
+    <button id="bubble-next">Continuar ▸</button>
+  </div>
+
+  <header class="topbar">
+    <span class="logo">★ Biblioteca de Simon</span>
+    <div class="top-btns">
+      <button class="round" id="fullBtn" title="Pantalla completa" aria-label="Pantalla completa" data-icono="pantalla"></button>
+      <button class="round" id="mapBtn" title="Ocultar mapa" aria-label="Mostrar u ocultar el mapa" data-icono="mapa"></button>
+      <button class="round" id="music" title="Música activada" aria-label="Activar o silenciar la música" data-icono="musica"></button>
+      <button class="round" id="voice" title="Voz activada" aria-label="Activar o silenciar la voz" data-icono="voz"></button>
+    </div>
+  </header>
+
+  <aside class="panel" id="panel">
+    <p class="kicker" id="kicker"></p>
+    <h2 id="p-title"></h2>
+    <p id="p-text"></p>
+  </aside>
+
+  <section class="mapbox" id="mapbox" aria-label="Mapa">
+    <p class="map-title" id="mapTitle"></p>
+    <div class="minimap" id="minimap"></div>
+  </section>
+
+  <nav class="controls" id="controls">
+    <button class="wide" id="back" data-icono="estante"> Estante</button>
+    <button id="prev" aria-label="Página anterior">&#8592;</button>
+    <span id="indicator"></span>
+    <button id="next" aria-label="Página siguiente">&#8594;</button>
+  </nav>
+
+  <div class="quiz" id="quiz" role="dialog" aria-modal="true" aria-labelledby="quizPregunta">
+    <div class="quiz-card">
+      <small id="quizPaso"></small>
+      <h3 id="quizPregunta"></h3>
+      <div class="quiz-opciones" id="quizOpciones"></div>
+      <p class="quiz-nota" id="quizNota"></p>
+      <button class="quiz-btn" id="quizBtn"></button>
+    </div>
+  </div>
+
+  <p class="guide" id="guide" role="status" aria-live="polite"></p>
+
+  <!-- Reproductor para los capítulos en video -->
+  <div class="film" id="film">
+    <div class="film-frame">
+      <video id="filmVideo" playsinline preload="auto"></video>
+      <div class="flicker"></div>
+      <div class="grain"></div>
+      <div class="scratches"></div>
+      <div class="film-card" id="filmCard">
+        <div class="film-title" id="filmTitleBox">
+          <small id="filmKicker"></small>
+          <h2 id="filmTitle"></h2>
+          <p id="filmSub"></p>
+        </div>
+      </div>
+      <div class="film-vignette"></div>
+    </div>
+    <button class="skip" id="skipFilm">Saltar ›</button>
+  </div>
+
+  <!-- Portada: el primer clic activa el sonido y presenta a Simon -->
+  <div class="portada" id="portada">
+    <div class="portada-card">
+      <p class="portada-kicker">Siete capítulos · 1918 — 1945</p>
+      <h1>La biblioteca<br>de Simon</h1>
+      <p class="portada-sub">Simon, el gato condecorado con la Medalla Dickin, te narra la guerra libro a libro. Activa el sonido.</p>
+      <button class="start" id="start">▶ Conocer a Simon</button>
+      <button class="portada-saltar" id="saltarIntro">Ir directo al estante</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+  <script src="./config.js"></script>
+
+  <script src="./capitulos/1/capitulo.js"></script>
+  <script src="./capitulos/2/capitulo.js"></script>
+  <script src="./capitulos/3/capitulo.js"></script>
+  <script src="./capitulos/5/capitulo.js"></script>
+  <script src="./capitulos/6/capitulo.js"></script>
+  <script src="./capitulos/7/capitulo.js"></script>
+
+  <script src="./app.js"></script>
+</body>
+</html>

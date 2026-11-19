@@ -2,11 +2,14 @@
    ÍNDICE
    1. Variables
    2. Base
+   2.1 Introducción: telón y video
    3. Efectos de impresión (textura de papel y tinta)
    4. Hero
    5. Scrollytelling
    6. Fotografías de prensa
-   7. Video scrubbing
+   6.1 Red de relaciones históricas
+   7. Sección II: Biblioteca de Simon
+   8. Créditos y fuentes
    ========================================================================== */
 
 /* ==========================================================================
@@ -25,6 +28,8 @@
 
   --font-headline: "Oswald", Impact, sans-serif;
   --font-editorial: "Newsreader", Georgia, serif;
+  --font-stencil: "Big Shoulders Stencil Display", Impact, sans-serif;
+  --font-typewriter: "Special Elite", "Courier New", monospace;
 
   /* Texturas de papel generadas con ruido SVG (feTurbulence).
      El último número de la 4.ª fila de cada feColorMatrix controla la
@@ -58,174 +63,557 @@ body {
   overflow-x: clip;
 }
 
-.intro {
+/* ==========================================================================
+   2.1 INTRODUCCIÓN: TELÓN Y VIDEO CINEMATOGRÁFICO
+   Mientras el telón está abierto, <html> lleva .is-intro-open y no hay scroll.
+   ========================================================================== */
+
+html.is-intro-open {
+  overflow: hidden;
+}
+
+.curtain {
+  --px: 0;
+  --py: 0;
   position: fixed;
   inset: 0;
   z-index: 100;
   display: grid;
   place-items: center;
   overflow: hidden;
-  color: #f2ead8;
-  background: #060606;
-  isolation: isolate;
+  background: #000;
+  transition: opacity 1.4s ease;
 }
 
-.intro::before,
-.intro::after {
-  position: absolute;
-  inset: 0;
-  content: "";
+.curtain.is-gone {
+  opacity: 0;
   pointer-events: none;
 }
 
-.intro::before {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(104, 93, 70, 0.26),
-    transparent 58%
-  );
-  animation: intro-flicker 1.8s steps(2, end) both;
-}
-
-.intro::after {
-  background: linear-gradient(
-    90deg,
-    #000 0%,
-    transparent 13%,
-    transparent 87%,
-    #000 100%
-  );
-}
-
-.intro__noise {
+/* Fotos de fondo que se suceden con un zoom lento; --px/--py siguen al ratón */
+.slides {
   position: absolute;
-  inset: -20%;
-  z-index: -1;
-  opacity: 0.2;
-  background-image: var(--tex-grain);
-  animation: intro-noise 0.16s steps(2, end) infinite;
+  inset: -3%;
+  overflow: hidden;
+  transform: translate(calc(var(--px) * -26px), calc(var(--py) * -18px));
+  transition: transform 0.8s ease-out;
 }
 
-.intro__scanlines {
+.slide {
+  --n: 4; /* número de fotos */
+  --t: 6s; /* tiempo de cada foto */
+  position: absolute;
+  inset: -6%;
+  background-position: center;
+  background-size: cover;
+  filter: grayscale(1) sepia(0.45) contrast(1.15) brightness(0.55) blur(1.5px);
+  opacity: 0;
+  animation: slide calc(var(--n) * var(--t)) linear infinite;
+  animation-delay: calc(var(--i) * var(--t) - 1.5s);
+}
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+    transform: scale(1.04) translate(var(--x0), var(--y0));
+  }
+  6%,
+  25% {
+    opacity: 1;
+  }
+  32%,
+  100% {
+    opacity: 0;
+    transform: scale(1.16) translate(var(--x1), var(--y1));
+  }
+}
+
+.curtain.is-shaking .slides {
+  animation: curtain-shake 0.5s ease-out;
+}
+
+@keyframes curtain-shake {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  20% {
+    translate: 3px -2px;
+  }
+  40% {
+    translate: -3px 2px;
+  }
+  60% {
+    translate: 2px 1px;
+  }
+  80% {
+    translate: -1px -1px;
+  }
+}
+
+/* Destello de explosión lejana (main.js elige la posición al azar) */
+.curtain__flash {
   position: absolute;
   inset: 0;
-  opacity: 0.2;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0 3px,
-    rgba(235, 225, 202, 0.22) 3px 4px
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    circle at var(--fx, 50%) var(--fy, 60%),
+    rgba(255, 170, 80, 0.55),
+    rgba(255, 120, 40, 0.15) 25%,
+    transparent 55%
   );
+}
+
+.curtain__flash.is-on {
+  animation: curtain-boom 1.6s ease-out;
+}
+
+@keyframes curtain-boom {
+  0% {
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  14% {
+    opacity: 0.35;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.curtain__shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 50%, rgba(0, 0, 0, 0.55), transparent 75%),
+    radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.85) 100%),
+    linear-gradient(180deg, rgba(10, 6, 2, 0.35), rgba(10, 6, 2, 0.15) 40%, rgba(10, 6, 2, 0.6));
+}
+
+.curtain__embers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   mix-blend-mode: screen;
 }
 
-.intro__frame {
-  position: relative;
-  width: min(84vw, 620px);
-  padding: 2rem 2.25rem;
-  text-align: center;
-  border-top: 1px solid rgba(242, 234, 216, 0.7);
-  border-bottom: 1px solid rgba(242, 234, 216, 0.7);
-  animation: intro-frame-in 1.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.intro__label,
-.intro__message {
-  font-family: var(--font-headline);
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.intro__label {
-  display: block;
-  margin-bottom: 1.1rem;
-  font-size: 0.72rem;
-  color: #b32e21;
-}
-
-.intro__message {
-  margin-top: 1rem;
-  font-size: clamp(1rem, 2.8vw, 1.5rem);
-}
-
-.intro__signal {
-  width: 100%;
-  height: 5px;
+.curtain__simon {
+  --sh: min(52vh, 480px);
+  position: absolute;
+  left: clamp(8px, 6vw, 110px);
+  bottom: 0;
+  width: calc(var(--sh) * 0.62);
+  height: var(--sh);
   overflow: hidden;
-  background: rgba(242, 234, 216, 0.16);
-}
-
-.intro__signal span {
-  display: block;
-  width: 35%;
-  height: 100%;
-  background: #d13a2c;
-  box-shadow: 0 0 18px #d13a2c;
-  animation: intro-signal 1.3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-}
-
-.intro.is-complete {
   pointer-events: none;
-  animation: intro-reveal 1.05s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  animation: curtain-simon-up 1.2s cubic-bezier(0.3, 1.3, 0.5, 1) 0.9s both;
+  transition:
+    opacity 0.5s,
+    transform 0.6s ease-in;
 }
 
-@keyframes intro-frame-in {
-  0% {
+.curtain__simon img {
+  position: absolute;
+  left: -4%;
+  top: -8%;
+  height: 150%;
+  width: auto;
+  filter: sepia(0.25) saturate(0.85) brightness(0.95)
+    drop-shadow(0 0 22px rgba(240, 200, 120, 0.25)) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.8));
+}
+
+@keyframes curtain-simon-up {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.curtain__inner {
+  position: relative;
+  padding: 0 16px;
+  text-align: center;
+  translate: calc(var(--px) * 10px) calc(var(--py) * 6px);
+  transition:
+    translate 0.8s ease-out,
+    opacity 0.4s;
+}
+
+/* Al pulsar "Comenzar" desaparecen el texto y Simon */
+.curtain.is-started .curtain__inner {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.curtain.is-started .curtain__simon {
+  opacity: 0;
+  transform: translateY(30%);
+}
+
+.curtain__kicker,
+.curtain__sub,
+.curtain__sound-hint {
+  font-family: var(--font-typewriter);
+  color: #d9c69a;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.curtain__kicker {
+  margin-bottom: 14px;
+  font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+  letter-spacing: 0.3em;
+}
+
+.curtain__title {
+  font-family: var(--font-stencil);
+  font-size: clamp(2.6rem, 9vw, 7rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #f1dfb0;
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 0.6),
+    0 6px 0 rgba(60, 25, 0, 0.55),
+    0 10px 40px rgba(0, 0, 0, 0.9);
+  animation: curtain-title 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.curtain__title::after {
+  content: "";
+  display: block;
+  width: 38%;
+  height: 3px;
+  margin: 18px auto 0;
+  background: linear-gradient(90deg, transparent, #c9a253, transparent);
+}
+
+@keyframes curtain-title {
+  from {
     opacity: 0;
-    transform: scaleX(0.05);
+    letter-spacing: 0.25em;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.03em;
+    filter: none;
+  }
+}
+
+.curtain__sub {
+  margin: 18px 0 34px;
+  font-size: clamp(0.8rem, 1.4vw, 1.05rem);
+  letter-spacing: 0.12em;
+}
+
+.curtain__start {
+  padding: 12px 38px;
+  font-family: var(--font-typewriter);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2b2410;
+  background: linear-gradient(180deg, #e3c27a, #b68a3c);
+  border: 2px solid #f1dfb0;
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 4px rgba(0, 0, 0, 0.45),
+    0 10px 24px rgba(0, 0, 0, 0.7),
+    inset 0 2px 3px rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition:
+    transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1),
+    filter 0.2s;
+}
+
+.curtain__start:hover:not(:disabled) {
+  transform: scale(1.06);
+  filter: brightness(1.1);
+}
+
+.curtain__start:disabled {
+  opacity: 0.75;
+  filter: grayscale(0.4);
+  cursor: wait;
+}
+
+/* Barra de carga: desaparece cuando el video ya está descargado */
+.curtain__bar {
+  width: min(260px, 60vw);
+  height: 3px;
+  margin: 30px auto 0;
+  overflow: hidden;
+  background: rgba(241, 223, 176, 0.18);
+  border-radius: 2px;
+  transition: opacity 0.6s 0.4s;
+}
+
+.curtain__bar i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #c9a253;
+  transition: width 0.3s;
+}
+
+.curtain.is-loaded .curtain__bar {
+  opacity: 0;
+}
+
+.curtain__skip {
+  display: block;
+  margin: 18px auto 0;
+  padding: 4px 8px;
+  font-family: var(--font-typewriter);
+  font-size: 0.9rem;
+  color: #d9c69a;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.curtain__skip:hover {
+  color: #f1dfb0;
+}
+
+.curtain__sound-hint {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(241, 223, 176, 0.35);
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -10px);
+  transition:
+    opacity 0.5s,
+    transform 0.5s;
+}
+
+.curtain__sound-hint.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 700px) {
+  .curtain__simon {
+    --sh: 34vh;
+    left: 50%;
+    margin-left: calc(var(--sh) * -0.31);
+  }
+
+  .curtain__inner {
+    margin-bottom: 30vh;
+  }
+
+  .curtain__sound-hint {
+    white-space: normal;
+    width: calc(100% - 32px);
+    text-align: center;
+  }
+}
+
+/* Proyector de cine: el video de introducción con efectos de película antigua */
+.film {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  transition: opacity 0.6s;
+}
+
+.film.is-open {
+  display: flex;
+}
+
+.film.is-closing {
+  opacity: 0;
+}
+
+.film__frame {
+  position: relative;
+  width: min(96vw, 170vh);
+  aspect-ratio: 16 / 9;
+  background: #000;
+  box-shadow:
+    0 0 0 10px #0b0b0b,
+    0 0 90px rgba(255, 220, 150, 0.22);
+  animation: film-projector 1.3s ease-out both;
+}
+
+@keyframes film-projector {
+  0% {
+    clip-path: inset(49.6% 10%);
+    filter: brightness(4);
   }
   45% {
-    opacity: 1;
-    transform: scaleX(1);
+    clip-path: inset(49.6% 0);
+    filter: brightness(3);
   }
   100% {
-    opacity: 1;
-    transform: scaleX(1);
+    clip-path: inset(0);
+    filter: brightness(1);
   }
 }
 
-@keyframes intro-flicker {
-  0%,
-  12%,
-  22%,
-  38% {
-    opacity: 0;
+/* Perforaciones de la cinta a los lados */
+.film__frame::before,
+.film__frame::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  width: 28px;
+  background: repeating-linear-gradient(180deg, #0b0b0b 0 11px, #e6dcc0 11px 33px, #0b0b0b 33px 44px);
+  background-clip: padding-box;
+  border-left: 7px solid #0b0b0b;
+  border-right: 7px solid #0b0b0b;
+  opacity: 0.85;
+}
+
+.film__frame::before {
+  left: -52px;
+}
+
+.film__frame::after {
+  right: -52px;
+}
+
+.film__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: saturate(1.25) contrast(1.06);
+  animation: film-weave 0.3s steps(2) infinite;
+}
+
+@keyframes film-weave {
+  50% {
+    transform: translate(1px, 1px);
   }
-  16%,
-  30%,
   100% {
-    opacity: 1;
+    transform: translate(-1px, 0);
   }
 }
 
-@keyframes intro-noise {
-  to {
-    transform: translate3d(4%, -3%, 0);
-  }
+.film__flicker,
+.film__grain,
+.film__scratches,
+.film__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
-@keyframes intro-signal {
-  from {
-    transform: translateX(-110%);
-  }
-  to {
-    transform: translateX(320%);
-  }
+.film__flicker {
+  background: #fff;
+  mix-blend-mode: overlay;
+  animation: film-flicker 0.2s steps(2) infinite;
 }
 
-@keyframes intro-reveal {
+@keyframes film-flicker {
   0% {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
+    opacity: 0.03;
   }
-  55% {
-    clip-path: inset(47% 0 47% 0);
-    opacity: 1;
+  50% {
+    opacity: 0.14;
   }
   100% {
-    clip-path: inset(50% 0 50% 0);
-    opacity: 0;
+    opacity: 0.06;
   }
+}
+
+.film__grain {
+  opacity: 0.24;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.6 0 0 0 -.6'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  animation: film-grain 0.5s steps(1) infinite;
+}
+
+@keyframes film-grain {
+  20% {
+    background-position: -40px 25px;
+  }
+  40% {
+    background-position: 30px -35px;
+  }
+  60% {
+    background-position: -20px -50px;
+  }
+  80% {
+    background-position: 55px 15px;
+  }
+}
+
+.film__scratches {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 170px,
+    rgba(255, 255, 255, 0.35) 170px 171px,
+    transparent 171px 380px
+  );
+  animation: film-scratches 0.8s steps(3) infinite;
+}
+
+@keyframes film-scratches {
+  0% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  33% {
+    transform: translateX(-60px);
+    opacity: 0.15;
+  }
+  66% {
+    transform: translateX(90px);
+    opacity: 0.6;
+  }
+}
+
+.film__vignette {
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.film__skip {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  z-index: 2;
+  padding: 8px 18px;
+  font: 15px Arial, Helvetica, sans-serif;
+  color: #eee;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.film__skip:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ==========================================================================
@@ -1099,34 +1487,37 @@ body {
 }
 
 /* ==========================================================================
-   7. PRODUCCIÓN AUDIOVISUAL (CABINA DE PROYECCIÓN — FORMA B)
+   7. SECCIÓN II: BIBLIOTECA DE SIMON
+   La cabecera sigue el estilo de periódico; debajo, el iframe ocupa toda la
+   pantalla porque la biblioteca está diseñada para verse a pantalla completa.
    ========================================================================== */
 
-.cinema {
-  padding: 5rem 1.5rem;
+.library {
+  padding-top: 5rem;
   background-color: var(--paper-bg);
   background-image: var(--paper-texture);
   border-top: 3px double var(--ink-border);
   border-bottom: 3px double var(--ink-border);
 }
 
-.cinema__container {
+.library__container {
   max-width: 1240px;
   margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-.cinema__header {
+.library__header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 1rem 1.5rem;
+  gap: 1rem 2.5rem;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--ink-border);
 }
 
-.cinema__kicker {
+.library__kicker {
   display: block;
   margin-bottom: 0.35rem;
   font-family: var(--font-headline);
@@ -1137,7 +1528,7 @@ body {
   color: var(--propaganda-red);
 }
 
-.cinema__title {
+.library__title {
   font-family: var(--font-headline);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 900;
@@ -1146,157 +1537,26 @@ body {
   color: var(--ink-primary);
 }
 
-.cinema__badge {
-  padding: 0.4rem 0.85rem;
-  font-family: var(--font-headline);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.1rem;
-  text-transform: uppercase;
-  color: var(--paper-card);
-  background-color: var(--ink-primary);
-  border: 2px solid var(--ink-border);
+.library__dek {
+  max-width: 42ch;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink-secondary);
 }
 
-.cinema__booth {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 1.75rem;
-  align-items: start;
+.library__stage {
+  height: 100vh;
+  height: 100svh; /* En móviles, sin contar la barra del navegador */
+  background: #1f343c; /* Color de la pared mientras carga */
+  border-top: 3px solid var(--ink-border);
 }
 
-@media (max-width: 900px) {
-  .cinema__booth {
-    grid-template-columns: 1fr;
-  }
-}
-
-.cinema__stage {
-  background-color: var(--paper-card);
-  background-image: var(--paper-texture);
-  border: 2px solid var(--ink-border);
-  box-shadow: 6px 6px 0 rgba(43, 38, 33, 0.85);
-}
-
-.cinema__screen-frame {
-  padding: 0.85rem;
-  background-color: #161412;
-  border-bottom: 3px double var(--ink-border);
-}
-
-.cinema__video {
+.library__frame {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  background-color: #000000;
-  object-fit: cover;
-  border: 1px solid rgba(236, 226, 205, 0.25);
-}
-
-.cinema__notes {
-  padding: 1.4rem 1.6rem;
-}
-
-.cinema__notes-top {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem 1rem;
-  margin-bottom: 0.45rem;
-}
-
-.cinema__notes-period {
-  font-family: var(--font-headline);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.14rem;
-  text-transform: uppercase;
-  color: var(--propaganda-red);
-}
-
-.cinema__notes-source {
-  font-family: var(--font-headline);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.05rem;
-  text-transform: uppercase;
-  color: var(--ink-secondary);
-}
-
-.cinema__notes-text {
-  font-size: 1.02rem;
-  line-height: 1.6;
-  color: var(--ink-secondary);
-}
-
-.cinema__playlist {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-}
-
-.cinema__reel {
-  padding: 1rem 1.15rem;
-  text-align: left;
-  background-color: var(--paper-card);
-  background-image: var(--paper-texture);
-  border: 2px solid var(--ink-border);
-  box-shadow: 4px 4px 0 rgba(43, 38, 33, 0.8);
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.cinema__reel:hover {
-  transform: translate(-2px, -2px);
-  border-color: var(--propaganda-red);
-}
-
-.cinema__reel.is-active {
-  background: var(--propaganda-red);
-  color: #ffffff;
-  border-color: var(--ink-border);
-  box-shadow: 6px 6px 0 var(--ink-border);
-}
-
-.cinema__reel-num {
-  display: block;
-  margin-bottom: 0.2rem;
-  font-family: var(--font-headline);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12rem;
-  text-transform: uppercase;
-  color: var(--propaganda-red);
-}
-
-.cinema__reel.is-active .cinema__reel-num {
-  color: #ffd8d3;
-}
-
-.cinema__reel-title {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-family: var(--font-editorial);
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.cinema__reel-sub {
-  display: block;
-  font-size: 0.88rem;
-  line-height: 1.4;
-  color: var(--ink-secondary);
-}
-
-.cinema__reel.is-active .cinema__reel-sub {
-  color: #f5eedb;
+  height: 100%;
+  border: 0;
 }
 
 /* ==========================================================================

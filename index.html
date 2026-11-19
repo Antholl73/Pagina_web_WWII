@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="is-intro-open">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>La Segunda Guerra Mundial</title>
 
-    <!-- Tipografías de época: Oswald (titulares prensa) y Newsreader (texto editorial) -->
+    <!-- Tipografías: Oswald (titulares), Newsreader (texto), Big Shoulders Stencil y Special Elite (telón de introducción) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Oswald:wght@500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Oswald:wght@500;700;900&family=Big+Shoulders+Stencil+Display:wght@900&family=Special+Elite&display=swap"
       rel="stylesheet"
     />
 
@@ -17,15 +17,49 @@
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
-    <div class="intro" id="intro" role="status" aria-live="polite">
-      <div class="intro__noise"></div>
-      <div class="intro__scanlines"></div>
-      <div class="intro__frame">
-        <span class="intro__label">Archivo audiovisual</span>
-        <div class="intro__signal"><span></span></div>
-        <p class="intro__message">Iniciando cinta histórica</p>
+    <!-- INTRODUCCIÓN: telón con botón "Comenzar" y video cinematográfico.
+         main.js precarga el video, lo reproduce al pulsar y después retira todo. -->
+    <div class="curtain" id="curtain">
+      <div class="slides" aria-hidden="true">
+        <div class="slide" style="background-image: url('/biblioteca/assets/berlin.jpg'); --i: 0; --x0: -3%; --x1: 3%; --y0: 2%; --y1: -2%"></div>
+        <div class="slide" style="background-image: url('/biblioteca/assets/tanques.jpg'); --i: 1; --x0: 3%; --x1: -3%; --y0: -1%; --y1: 2%"></div>
+        <div class="slide" style="background-image: url('/biblioteca/assets/normandia.jpg'); --i: 2; --x0: -2%; --x1: 2%; --y0: -2%; --y1: 2%"></div>
+        <div class="slide" style="background-image: url('/biblioteca/assets/niebla.jpg'); --i: 3; --x0: 2%; --x1: -2%; --y0: 1%; --y1: -1%"></div>
       </div>
+      <div class="curtain__flash" id="curtain-flash" aria-hidden="true"></div>
+      <div class="curtain__shade" aria-hidden="true"></div>
+      <canvas class="curtain__embers" id="curtain-embers" aria-hidden="true"></canvas>
+      <div class="curtain__simon" aria-hidden="true">
+        <img src="/biblioteca/assets/simon.png" alt="" />
+      </div>
+      <div class="curtain__inner">
+        <p class="curtain__kicker">1939 &nbsp;—&nbsp; 1945</p>
+        <h1 class="curtain__title">Segunda<br />Guerra Mundial</h1>
+        <p class="curtain__sub">Del ascenso totalitario al nuevo orden</p>
+        <button type="button" class="curtain__start" id="curtain-start" disabled>
+          Cargando… 0%
+        </button>
+        <div class="curtain__bar" aria-hidden="true"><i id="curtain-bar"></i></div>
+        <button type="button" class="curtain__skip" id="curtain-skip">
+          Saltar introducción
+        </button>
+      </div>
+      <p class="curtain__sound-hint" id="curtain-sound-hint">
+        Haz clic en cualquier parte para activar la música
+      </p>
     </div>
+
+    <div class="film" id="film">
+      <div class="film__frame">
+        <video class="film__video" id="film-video" playsinline preload="none"></video>
+        <div class="film__flicker"></div>
+        <div class="film__grain"></div>
+        <div class="film__scratches"></div>
+        <div class="film__vignette"></div>
+      </div>
+      <button type="button" class="film__skip" id="film-skip">Saltar ›</button>
+    </div>
+
     <!-- FILTRO DE TINTA: bordes irregulares y huecos de tinta como en la imprenta de tipos móviles.
          Se aplica desde CSS con  filter: url(#ink-rough)  -->
     <svg
@@ -340,125 +374,34 @@
       </article>
     </section>
 
-    <!-- SECCIÓN PRODUCCIÓN AUDIOVISUAL -->
-    <section class="cinema" id="archivo-audiovisual">
-      <div class="cinema__container">
-        <header class="cinema__header">
+    <!-- SECCIÓN II: BIBLIOTECA DE SIMON
+         Los capítulos (libros narrados y videos) son una página aparte en
+         public/biblioteca/ que se muestra aquí dentro con un iframe. -->
+    <section class="library" id="biblioteca">
+      <div class="library__container">
+        <header class="library__header">
           <div>
-            <span class="cinema__kicker">Sección II</span>
-            <h2 class="cinema__title">
-              Del Ascenso Totalitario al Nuevo Orden
-            </h2>
+            <span class="library__kicker">Sección II</span>
+            <h2 class="library__title">Del Ascenso Totalitario al Nuevo Orden</h2>
           </div>
+          <p class="library__dek">
+            Elige un capítulo del estante: Simon, el gato condecorado con la
+            Medalla Dickin, te narra cada libro página a página. Activa el
+            sonido.
+          </p>
         </header>
+      </div>
 
-        <div class="cinema__booth">
-          <!-- Pantalla principal del proyector -->
-          <div class="cinema__stage">
-            <div class="cinema__screen-frame">
-              <video
-                id="cinema-video"
-                class="cinema__video"
-                src="/videos/prueba_video_01.mp4"
-                controls
-                preload="metadata"
-                playsinline
-              ></video>
-            </div>
-
-            <div class="cinema__notes">
-              <div class="cinema__notes-top">
-                <span class="cinema__notes-period" id="cinema-period">
-                  Rollo 01 · 1918–1932
-                </span>
-                <span class="cinema__notes-source" id="cinema-source">
-                  Fuentes: The Avalon Project, 1919; USHMM, s. f.-a; USHMM, s.
-                  f.-b; Williamson, 2023
-                </span>
-              </div>
-              <h3 class="cinema__notes-title" id="cinema-title">
-                Posguerra, Versalles y Gran Depresión
-              </h3>
-              <p class="cinema__notes-text" id="cinema-desc">
-                Analiza cómo el impacto del Tratado de Versalles en Weimar, el
-                descontento italiano de posguerra y el desempleo masivo tras
-                1929 crearon el escenario que aprovecharon fascistas y nazis
-                mediante propaganda y violencia política.
-              </p>
-            </div>
-          </div>
-
-          <!-- Selector de los 4 capítulos (rollos de archivo) -->
-          <div
-            class="cinema__playlist"
-            role="tablist"
-            aria-label="Capítulos audiovisuales"
-          >
-            <button
-              type="button"
-              class="cinema__reel is-active"
-              role="tab"
-              aria-selected="true"
-              data-reel="0"
-            >
-              <span class="cinema__reel-num">Rollo 01 · 1918–1932</span>
-              <span class="cinema__reel-title">
-                Posguerra, Versalles y Gran Depresión
-              </span>
-              <span class="cinema__reel-sub">
-                Crisis económica, Weimar y temor al socialismo
-              </span>
-            </button>
-
-            <button
-              type="button"
-              class="cinema__reel"
-              role="tab"
-              aria-selected="false"
-              data-reel="1"
-            >
-              <span class="cinema__reel-num">Rollo 02 · 1922–1935</span>
-              <span class="cinema__reel-title">
-                Dos Caminos al Poder: Roma y Berlín
-              </span>
-              <span class="cinema__reel-sub">
-                Marcha sobre Roma, Ley Habilitante y Núremberg
-              </span>
-            </button>
-
-            <button
-              type="button"
-              class="cinema__reel"
-              role="tab"
-              aria-selected="false"
-              data-reel="2"
-            >
-              <span class="cinema__reel-num">Rollo 03 · 1931–1941</span>
-              <span class="cinema__reel-title">
-                Escalada, Blitzkrieg y Viraje Global
-              </span>
-              <span class="cinema__reel-sub">
-                Precursores, apaciguamiento, Pacto de 1939 y Barbarroja
-              </span>
-            </button>
-
-            <button
-              type="button"
-              class="cinema__reel"
-              role="tab"
-              aria-selected="false"
-              data-reel="3"
-            >
-              <span class="cinema__reel-num">Rollo 04 · 1938–1945</span>
-              <span class="cinema__reel-title">
-                Rassenkrieg, Holocausto y Nuevo Orden
-              </span>
-              <span class="cinema__reel-sub">
-                Shoah, guerra total, Guerra Fría y descolonización
-              </span>
-            </button>
-          </div>
-        </div>
+      <div class="library__stage">
+        <iframe
+          class="library__frame"
+          id="library-frame"
+          src="/biblioteca/index.html"
+          title="Biblioteca de Simon: capítulos de la Segunda Guerra Mundial"
+          loading="lazy"
+          allow="autoplay; fullscreen"
+          allowfullscreen
+        ></iframe>
       </div>
     </section>
 
