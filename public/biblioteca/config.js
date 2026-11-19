@@ -4,14 +4,15 @@ const VISTA_LIBRO = {
   perspectiva: 2600
 };
 
+// Tela de encuadernación de cada tomo: [color claro, color oscuro]
 const COLORES = [
-  ['#343e72', '#1a2040'],
-  ['#2a7a84', '#134048'],
-  ['#8a3550', '#4a1428'],
-  ['#3a7a50', '#17402a'],
-  ['#6a427f', '#33194a'],
-  ['#b8832e', '#6e4510'],
-  ['#475669', '#222c3a']
+  ['#3a3530', '#1c1916'],   // negro tinta
+  ['#7a2a1f', '#4a140e'],   // rojo sangre de buey
+  ['#34463a', '#1b261f'],   // verde archivo
+  ['#2f3a4c', '#18202c'],   // azul marino
+  ['#5e4a35', '#36291c'],   // cuero
+  ['#7d6233', '#4a3818'],   // ocre
+  ['#4a4743', '#272523']    // gris plomo
 ];
 const NUM_LIBROS = 7;
 

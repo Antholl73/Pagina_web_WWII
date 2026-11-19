@@ -24,7 +24,7 @@
   --ink-primary: #191715;
   --ink-secondary: #423d36;
   --ink-border: #2b2621;
-  --propaganda-red: #9c251a;
+  --propaganda-red: #8a3a2c; /* Rojo de imprenta desvaído: solo para detalles pequeños */
 
   --font-headline: "Oswald", Impact, sans-serif;
   --font-editorial: "Newsreader", Georgia, serif;
@@ -703,12 +703,10 @@ html.is-intro-open {
   max-width: 850px;
   margin: 1.5rem auto 2.5rem;
   padding: 2rem 2.5rem;
-  color: #fff9ee;
-  background:
-    var(--tex-grain), var(--tex-fibers),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.18)),
-    var(--propaganda-red);
-  border: 2px solid var(--ink-border);
+  color: var(--ink-primary);
+  background-color: var(--paper-card);
+  background-image: var(--paper-texture);
+  border: 4px double var(--ink-border);
   box-shadow: 5px 5px 0 var(--ink-border);
 }
 
@@ -721,8 +719,8 @@ html.is-intro-open {
   font-weight: 700;
   letter-spacing: 0.2rem;
   text-transform: uppercase;
-  color: #ffd8d3;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--propaganda-red);
+  border-bottom: 1px solid var(--ink-border);
 }
 
 .hero__question-text {
@@ -732,7 +730,7 @@ html.is-intro-open {
   line-height: 1.35;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--ink-primary);
 }
 
 .hero__meta-link {
@@ -974,8 +972,8 @@ html.is-intro-open {
 .step.is-active {
   opacity: 1;
   transform: translateY(0);
-  border-color: var(--propaganda-red);
-  box-shadow: 8px 8px 0 var(--propaganda-red);
+  border-color: var(--ink-primary);
+  box-shadow: 8px 8px 0 var(--ink-primary);
 }
 
 .step > * {
@@ -1130,8 +1128,6 @@ html.is-intro-open {
 
 .network {
   padding: 5rem 1.5rem;
-  background-color: var(--paper-bg);
-  background-image: var(--paper-texture);
   border-bottom: 3px double var(--ink-border);
 }
 
@@ -1338,18 +1334,18 @@ html.is-intro-open {
 
 .net-node.is-connected {
   border-color: var(--propaganda-red);
-  box-shadow: 5px 5px 0 var(--propaganda-red);
+  box-shadow: 5px 5px 0 var(--ink-border);
 }
 
 .net-node.is-selected {
-  color: #ffffff;
-  background: var(--propaganda-red);
+  color: var(--paper-card);
+  background: var(--ink-primary);
   border-color: var(--ink-border);
   box-shadow: 6px 6px 0 var(--ink-border);
 }
 
 .net-node.is-selected .net-node__tag {
-  color: #ffd8d3;
+  color: #e2c4b5;
 }
 
 /* Inspector inferior */
@@ -1358,7 +1354,7 @@ html.is-intro-open {
   background-color: var(--paper-card);
   background-image: var(--paper-texture);
   border: 2px solid var(--ink-border);
-  border-left: 5px solid var(--propaganda-red);
+  border-left: 5px solid var(--ink-primary);
   box-shadow: 5px 5px 0 rgba(43, 38, 33, 0.85);
 }
 
@@ -1428,8 +1424,8 @@ html.is-intro-open {
   font-weight: 700;
   letter-spacing: 0.08rem;
   text-transform: uppercase;
-  color: #ffffff;
-  background-color: var(--propaganda-red);
+  color: var(--paper-card);
+  background-color: var(--ink-primary);
 }
 
 .network__edge-route {
@@ -1494,8 +1490,6 @@ html.is-intro-open {
 
 .library {
   padding-top: 5rem;
-  background-color: var(--paper-bg);
-  background-image: var(--paper-texture);
   border-top: 3px double var(--ink-border);
   border-bottom: 3px double var(--ink-border);
 }
@@ -1548,7 +1542,6 @@ html.is-intro-open {
 .library__stage {
   height: 100vh;
   height: 100svh; /* En móviles, sin contar la barra del navegador */
-  background: #1f343c; /* Color de la pared mientras carga */
   border-top: 3px solid var(--ink-border);
 }
 

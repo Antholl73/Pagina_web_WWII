@@ -436,7 +436,6 @@ startBtn.addEventListener('click', () => {
 $('saltarIntro').addEventListener('click', () => {
   cerrarPortada();
   document.body.classList.remove('intro');
-  guide('Elige un capítulo del estante', 5000);
 });
 
 let introIdx = 0;
