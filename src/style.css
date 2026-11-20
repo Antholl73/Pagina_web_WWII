@@ -5,6 +5,7 @@
    2.1 Introducción: telón y video
    3. Efectos de impresión (textura de papel y tinta)
    4. Hero
+   4.1 Simon, el narrador
    5. Scrollytelling
    6. Fotografías de prensa
    6.1 Red de relaciones históricas
@@ -780,6 +781,125 @@ html.is-intro-open {
 }
 
 /* ==========================================================================
+   4.1 SIMON, EL NARRADOR
+   Aparece como columnista: recortado en la portada y con su retrato
+   pequeño firmando notas en las tarjetas y en las cabeceras de sección.
+   ========================================================================== */
+
+/* Portada: Simon recortado como una foto pegada en el periódico, bajo la pregunta */
+.hero__simon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.9rem;
+  margin: 0 auto 1.5rem;
+}
+
+.hero__simon img {
+  height: clamp(130px, 22vh, 200px);
+  width: auto;
+  filter: sepia(0.3) saturate(0.85) drop-shadow(3px 4px 0 rgba(43, 38, 33, 0.35));
+}
+
+.hero__simon-bubble {
+  position: relative;
+  max-width: 280px;
+  margin-bottom: 1.5rem;
+  padding: 0.8rem 1rem;
+  font-family: var(--font-editorial);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.45;
+  text-align: left;
+  color: var(--ink-primary);
+  background-color: var(--paper-card);
+  background-image: var(--paper-texture);
+  border: 2px solid var(--ink-border);
+  box-shadow: 4px 4px 0 rgba(43, 38, 33, 0.85);
+}
+
+/* Pico del bocadillo apuntando a Simon */
+.hero__simon-bubble::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 1.2rem;
+  border: 6px solid transparent;
+  border-right: 6px solid var(--ink-border);
+}
+
+/* Nota firmada por Simon (tarjetas y cabeceras) */
+.simon-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--ink-border);
+}
+
+.simon-note__photo {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  object-position: 50% 12%; /* Encuadra la cara */
+  background-color: var(--paper-photo);
+  border: 2px solid var(--ink-border);
+  border-radius: 50%;
+  filter: sepia(0.4) saturate(0.8) contrast(1.05);
+}
+
+.simon-note__text {
+  font-family: var(--font-editorial);
+  font-size: 0.98rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.simon-note__by {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  color: var(--propaganda-red);
+}
+
+/* En las cabeceras de sección, la nota va al lado del título */
+.simon-note--header {
+  max-width: 420px;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* En móvil, Simon pasa a ser un retrato redondo para no ocupar tanto */
+@media (max-width: 700px) {
+  .hero__simon {
+    align-items: center;
+  }
+
+  .hero__simon img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    object-position: 50% 12%;
+    border: 2px solid var(--ink-border);
+    border-radius: 50%;
+    filter: sepia(0.4) saturate(0.8);
+  }
+
+  .hero__simon-bubble {
+    margin-bottom: 0;
+  }
+}
+
+/* ==========================================================================
    5. SCROLLYTELLING
    El fondo (.scrolly__graphic) queda fijo con sticky mientras las tarjetas
    (.step) pasan por encima. main.js marca la tarjeta del centro con .is-active
@@ -1529,14 +1649,6 @@ html.is-intro-open {
   line-height: 1;
   text-transform: uppercase;
   color: var(--ink-primary);
-}
-
-.library__dek {
-  max-width: 42ch;
-  font-size: 1rem;
-  font-style: italic;
-  line-height: 1.5;
-  color: var(--ink-secondary);
 }
 
 .library__stage {
